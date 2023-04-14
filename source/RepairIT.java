@@ -11,8 +11,8 @@ public class RepairIT extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        Group root;
-        Scene scene = new Scene(null,1920, 1080);
+        Group root = new Group();
+        Scene scene = new Scene(root,500, 500);
         stage.setTitle("RepairIT");
         stage.setScene(scene);
         stage.show();

@@ -6,8 +6,8 @@ import javafx.stage.Stage;
 
 public class RepairIT extends Application{
     public static void main(String[] args) {
+        CustomerSQLDatabase customerSQLDatabase = new CustomerSQLDatabase();
         Application.launch();
-        System.out.println("Hello world!");
     }
 
     @Override

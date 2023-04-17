@@ -4,10 +4,15 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-public class RepairIT extends Application{
+public class RepairIT extends Application {
+
+    private static final CustomerHandler customerHandler = new CustomerHandler();
     public static void main(String[] args) {
-        CustomerSQLDatabase customerSQLDatabase = new CustomerSQLDatabase();
         Application.launch();
+    }
+
+    public CustomerHandler getCustomerHandler() {
+        return customerHandler;
     }
 
     @Override

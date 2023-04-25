@@ -7,12 +7,20 @@ import javafx.stage.Stage;
 public class RepairIT extends Application {
 
     private static final CustomerHandler customerHandler = new CustomerHandler();
+    private static final RepairTicketHandler repairticketHandler = new RepairTicketHandler();
+    private static final ComputerHandler computerHandler = new ComputerHandler();
     public static void main(String[] args) {
         Application.launch();
     }
 
     public CustomerHandler getCustomerHandler() {
         return customerHandler;
+    }
+    public RepairTicketHandler getRepairticketHandler() {
+        return repairticketHandler;
+    }
+    public ComputerHandler getComputerHandler() {
+        return computerHandler;
     }
 
     @Override

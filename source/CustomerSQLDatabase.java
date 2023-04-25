@@ -13,6 +13,6 @@ public class CustomerSQLDatabase {
             System.exit(0);
         }
 
-        System.out.println("Established connection to customer database");
+        System.out.println("Established connection to Customer database");
     }
 }

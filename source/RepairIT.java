@@ -78,7 +78,7 @@ public class RepairIT extends Application {
         Font font = Font.font("Arial", FontWeight.BOLD, 16);
         searchButton.setFont(font);
         searchButton.setOnAction(actionEvent -> {
-            System.out.println("fjdoiejgjioerehrg");
+            System.out.println("button clicked");
         });
 
         // sets coordinates for customer Queue text
@@ -118,12 +118,13 @@ public class RepairIT extends Application {
         repairScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
         repairScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
 
-        // repairScrollPane.setPrefSize(300, 400);
-
+        // Formats the Repair Queue
         AnchorPane.setTopAnchor(repairScrollPane, 70.0); // Set top anchor for repairScrollPane
         AnchorPane.setRightAnchor(repairScrollPane, 10.0); // Set right anchor for repairScrollPane
 
+        // Adds UI elements to scene
         anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane,customerText, repairText, searchButton);
+        // Places UI elements on top of the rectangle
         stackPane.getChildren().addAll(anchorPane,searchButton);
         // Create sample data for the customer queue (replace with your actual data)
         List<Customer> customerList = new ArrayList<>();

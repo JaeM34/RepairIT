@@ -81,9 +81,9 @@ public class RepairIT extends Application {
         AnchorPane.setTopAnchor(titleText, 10.0); // Set top anchor for Button 2
         AnchorPane.setLeftAnchor(titleText, 10.0); // Set right anchor for Button 2
 
-        anchorPane.getChildren().addAll(searchButton, titleText);
+       // anchorPane.getChildren().addAll(searchButton, titleText);
 
-        stackPane.getChildren().add(anchorPane);
+       // stackPane.getChildren().add(anchorPane);
 
         // Bind the size of the button to the size of the rectangle
         searchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
@@ -91,8 +91,6 @@ public class RepairIT extends Application {
 
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
-
-
 
         // Create a VBox for the customer queue
         VBox customerQueue = new VBox();
@@ -103,14 +101,25 @@ public class RepairIT extends Application {
 
         // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
         ScrollPane customerScrollPane = new ScrollPane(customerQueue);
-        root.setLeft(customerScrollPane);
+        customerScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.4));
+        customerScrollPane.prefHeightProperty().bind(rectangle.heightProperty());
+        //customerScrollPane.setPrefSize(300, 400);
+        // sets coordinates for the customerScrollPane
+        AnchorPane.setTopAnchor(customerScrollPane, 70.0); // Set top anchor for customerScrollPane
+        AnchorPane.setLeftAnchor(customerScrollPane, 10.0); // Set left anchor for customerScrollPane
 
         // Create a ScrollPane to hold the repair queue and set it as right of the root BorderPane
         ScrollPane repairScrollPane = new ScrollPane(repairQueue);
-        root.setCenter(repairScrollPane);
+        repairScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.4));
+        repairScrollPane.prefHeightProperty().bind(rectangle.heightProperty());
 
-       // anchorPane.get
+        // repairScrollPane.setPrefSize(300, 400);
 
+        AnchorPane.setTopAnchor(repairScrollPane, 70.0); // Set top anchor for repairScrollPane
+        AnchorPane.setRightAnchor(repairScrollPane, 10.0); // Set right anchor for repairScrollPane
+
+        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane,searchButton, titleText);
+        stackPane.getChildren().add(anchorPane);
         // Create sample data for the customer queue (replace with your actual data)
         List<Customer> customerList = new ArrayList<>();
         customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));

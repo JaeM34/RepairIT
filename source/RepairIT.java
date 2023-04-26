@@ -41,60 +41,40 @@ public class RepairIT extends Application {
         root.setPadding(new Insets(10));
         Scene scene = new Scene(root, 1000, 600);
 
-        // Create a StackPane for the rectangles and button
+        // Create a StackPane for the rectangle and button
         StackPane stackPane = new StackPane();
 
-        // Create a rectangle for the top left corner
-        Rectangle topLeftRectangle = new Rectangle();
-        topLeftRectangle.setFill(Color.WHITE); // Set fill color
-        topLeftRectangle.setStroke(Color.BLACK); // Set border color
-        topLeftRectangle.setStrokeWidth(2); // Set border width
+        // Create a rectangle
+        Rectangle rectangle = new Rectangle();
+        rectangle.setFill(Color.WHITE);
+        rectangle.setStroke(Color.BLACK); // Set border color
+        rectangle.setStrokeWidth(2); // Set border width
 
-        // Bind the size of the top left rectangle to the size of the root BorderPane
-        topLeftRectangle.widthProperty().bind(root.widthProperty().multiply(0.2));
-        topLeftRectangle.heightProperty().bind(root.heightProperty().multiply(0.1));
+        // Bind the size of the rectangle to the size of the root BorderPane
+        rectangle.widthProperty().bind(root.widthProperty());
+        rectangle.heightProperty().bind(root.heightProperty());
 
-        // Set the alignment property of the top left rectangle to position it in the top left corner
-        stackPane.setAlignment(topLeftRectangle, Pos.TOP_LEFT);
-
-        // Create a Text node for the "RepairIT" text
-        Text repairItText = new Text("RepairIT");
-        Font font = Font.font("Arial", FontWeight.BOLD, 16); // Replace with desired font, weight, and size
-        repairItText.setFont(font);
-        repairItText.setFill(Color.BLACK); // Set text color
-
-        // Create the main rectangle
-        Rectangle mainRectangle = new Rectangle();
-        mainRectangle.setFill(Color.WHITE);
-        mainRectangle.setStroke(Color.BLACK); // Set border color
-        mainRectangle.setStrokeWidth(2); // Set border width
-
-        // Bind the size of the main rectangle to the size of the root BorderPane
-        mainRectangle.widthProperty().bind(root.widthProperty());
-        mainRectangle.heightProperty().bind(root.heightProperty());
-
+        // Create a text node
+        Text text = new Text("RepairIT");
+        Font textFont = Font.font("Arial", FontWeight.BOLD, 40); // Replace with desired font, weight, and size
+        text.setFont(textFont);
         // Create a button
         Button button = new Button("Search Customer");
+        Font font = Font.font("Arial", FontWeight.BOLD, 16);
         button.setFont(font);
 
-        button.setOnAction(event -> {
-            System.out.println("Clicked");
-        });
+        // Add the rectangle and button to the stack pane
+        stackPane.getChildren().addAll(rectangle,text, button);
 
-        // Add the main rectangle as the background of the stack pane
-        stackPane.getChildren().add(mainRectangle);
+        // Set the alignment property of the stack pane to position the text in the top center
+        stackPane.setAlignment(text, Pos.TOP_CENTER);
 
-        // Add the rectangles and button as children of the stack pane
-        stackPane.getChildren().addAll(button);
-
-        // Add the top left rectangle and text as children of the stack pane
-        stackPane.getChildren().addAll(topLeftRectangle,repairItText);
         // Set the alignment property of the stack pane to position the button in the top right
         stackPane.setAlignment(button, Pos.TOP_RIGHT);
 
-        // Bind the size of the button to the size of the main rectangle
-        button.prefWidthProperty().bind(mainRectangle.widthProperty().multiply(0.2));
-        button.prefHeightProperty().bind(mainRectangle.heightProperty().multiply(0.1));
+        // Bind the size of the button to the size of the rectangle
+        button.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
+        button.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
 
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
@@ -103,5 +83,4 @@ public class RepairIT extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
 }

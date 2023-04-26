@@ -50,9 +50,8 @@ public class RepairIT extends Application {
         rectangle.setStroke(Color.BLACK); // Set border color
         rectangle.setStrokeWidth(2); // Set border width
 
-        // Bind the size of the rectangle to the size of the root BorderPane
-        rectangle.widthProperty().bind(root.widthProperty());
-        rectangle.heightProperty().bind(root.heightProperty());
+        rectangle.widthProperty().bind(root.widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
+        rectangle.heightProperty().bind(root.heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
 
         // Create a text node
         Text text = new Text("RepairIT");

@@ -15,6 +15,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -65,26 +66,30 @@ public class RepairIT extends Application {
         stackPane.getChildren().add(rectangle);
 
         // Create a text node
-        Text titleText = new Text("RepairIT");
-        Font textFont = Font.font("Arial", FontWeight.BOLD, 40); // Replace with desired font, weight, and size
-        titleText.setFont(textFont);
+        Text customerText = new Text("Customer Queue");
+        Font textFont = Font.font("Arial", FontWeight.BOLD, 20); // Replace with desired font, weight, and size
+        customerText.setFont(textFont);
+
+        Text repairText = new Text("Repair Queue");
+        repairText.setFont(textFont);
 
         // Create a button
         Button searchButton = new Button("Search Customer");
         Font font = Font.font("Arial", FontWeight.BOLD, 16);
         searchButton.setFont(font);
+        searchButton.setOnAction(actionEvent -> {
+            System.out.println("fjdoiejgjioerehrg");
+        });
 
-        // sets coordinates for the search button
-        AnchorPane.setTopAnchor(searchButton, 20.0); // Set top anchor for Button 1
-        AnchorPane.setRightAnchor(searchButton, 10.0); // Set left anchor for Button 1
-        // sets coordinates for text
-        AnchorPane.setTopAnchor(titleText, 10.0); // Set top anchor for Button 2
-        AnchorPane.setLeftAnchor(titleText, 10.0); // Set right anchor for Button 2
+        // sets coordinates for customer Queue text
+        AnchorPane.setTopAnchor(customerText, 10.0); // Set top anchor for CUSTOMER Queue Text
+        AnchorPane.setLeftAnchor(customerText, 100.0); // Set right anchor for Button 2
+        // sets coordinates for Repair Queue Text
+        AnchorPane.setTopAnchor(repairText, 10.0); // Set top anchor for CUSTOMER Queue Text
+        AnchorPane.setRightAnchor(repairText, 100.0); // Set right anchor for Button 2
 
-       // anchorPane.getChildren().addAll(searchButton, titleText);
 
-       // stackPane.getChildren().add(anchorPane);
-
+        StackPane.setAlignment(searchButton, Pos.TOP_CENTER);
         // Bind the size of the button to the size of the rectangle
         searchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
         searchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
@@ -101,8 +106,8 @@ public class RepairIT extends Application {
 
         // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
         ScrollPane customerScrollPane = new ScrollPane(customerQueue);
-        customerScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.4));
-        customerScrollPane.prefHeightProperty().bind(rectangle.heightProperty());
+        customerScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
+        customerScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
         //customerScrollPane.setPrefSize(300, 400);
         // sets coordinates for the customerScrollPane
         AnchorPane.setTopAnchor(customerScrollPane, 70.0); // Set top anchor for customerScrollPane
@@ -110,16 +115,16 @@ public class RepairIT extends Application {
 
         // Create a ScrollPane to hold the repair queue and set it as right of the root BorderPane
         ScrollPane repairScrollPane = new ScrollPane(repairQueue);
-        repairScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.4));
-        repairScrollPane.prefHeightProperty().bind(rectangle.heightProperty());
+        repairScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
+        repairScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
 
         // repairScrollPane.setPrefSize(300, 400);
 
         AnchorPane.setTopAnchor(repairScrollPane, 70.0); // Set top anchor for repairScrollPane
         AnchorPane.setRightAnchor(repairScrollPane, 10.0); // Set right anchor for repairScrollPane
 
-        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane,searchButton, titleText);
-        stackPane.getChildren().add(anchorPane);
+        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane,customerText, repairText, searchButton);
+        stackPane.getChildren().addAll(anchorPane,searchButton);
         // Create sample data for the customer queue (replace with your actual data)
         List<Customer> customerList = new ArrayList<>();
         customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
@@ -164,7 +169,6 @@ public class RepairIT extends Application {
         Label addressLabel = new Label("Address: " + customer.getAddress());
         Label computersLabel = new Label("Computer's Label: " + customer.getComputers());
         Label repairAllTicketsLabel = new Label("Repair Tickets: " + customer.getRepairAllTickets());
-
 
        // Button removeButton = new Button("Remove");
        // removeButton.setOnAction(event -> {

@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -40,9 +41,11 @@ public class RepairIT extends Application {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
         Scene scene = new Scene(root, 1000, 600);
-
         // Create a StackPane for the rectangle and button
         StackPane stackPane = new StackPane();
+        // Create a AnchorPane for UI component placement
+        AnchorPane anchorPane = new AnchorPane();
+
 
         // Create a rectangle
         Rectangle rectangle = new Rectangle();
@@ -50,34 +53,39 @@ public class RepairIT extends Application {
         rectangle.setStroke(Color.BLACK); // Set border color
         rectangle.setStrokeWidth(2); // Set border width
 
+        // Width and height of rectangle relative size to the window
         rectangle.widthProperty().bind(root.widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
         rectangle.heightProperty().bind(root.heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
+        // Adds rectangle as the base layer
+        stackPane.getChildren().add(rectangle);
 
         // Create a text node
-        Text text = new Text("RepairIT");
+        Text titleText = new Text("RepairIT");
         Font textFont = Font.font("Arial", FontWeight.BOLD, 40); // Replace with desired font, weight, and size
-        text.setFont(textFont);
+        titleText.setFont(textFont);
+
         // Create a button
-        Button button = new Button("Search Customer");
+        Button searchButton = new Button("Search Customer");
         Font font = Font.font("Arial", FontWeight.BOLD, 16);
-        button.setFont(font);
+        searchButton.setFont(font);
 
-        // Add the rectangle and button to the stack pane
-        stackPane.getChildren().addAll(rectangle,text, button);
+        // sets coordinates for the search button
+        AnchorPane.setTopAnchor(searchButton, 20.0); // Set top anchor for Button 1
+        AnchorPane.setRightAnchor(searchButton, 10.0); // Set left anchor for Button 1
+        // sets coordinates for text
+        AnchorPane.setTopAnchor(titleText, 10.0); // Set top anchor for Button 2
+        AnchorPane.setLeftAnchor(titleText, 10.0); // Set right anchor for Button 2
 
-        // Set the alignment property of the stack pane to position the text in the top center
-        stackPane.setAlignment(text, Pos.TOP_CENTER);
+        anchorPane.getChildren().addAll(searchButton, titleText);
 
-        // Set the alignment property of the stack pane to position the button in the top right
-        stackPane.setAlignment(button, Pos.TOP_RIGHT);
+        stackPane.getChildren().add(anchorPane);
 
         // Bind the size of the button to the size of the rectangle
-        button.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        button.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
+        searchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
+        searchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
 
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
-
         stage.setTitle("RepairIT");
         stage.setScene(scene);
         stage.show();

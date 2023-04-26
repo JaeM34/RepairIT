@@ -1,8 +1,8 @@
 public class RepairTicket {
 
     int ID;
-    // Customer customer
-    // Computer computer
+     Customer customer;
+     Computer computer;
     // Workflow[] workflows
     String status;
     

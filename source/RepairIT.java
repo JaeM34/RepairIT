@@ -4,15 +4,21 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RepairIT extends Application {
 
@@ -45,7 +51,6 @@ public class RepairIT extends Application {
         StackPane stackPane = new StackPane();
         // Create a AnchorPane for UI component placement
         AnchorPane anchorPane = new AnchorPane();
-
 
         // Create a rectangle
         Rectangle rectangle = new Rectangle();
@@ -86,8 +91,104 @@ public class RepairIT extends Application {
 
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
+
+
+
+        // Create a VBox for the customer queue
+        VBox customerQueue = new VBox();
+        customerQueue.setSpacing(10); // Set spacing between customer blocks
+        // Create a VBox for the repair queue
+        VBox repairQueue = new VBox();
+        repairQueue.setSpacing(10); // Set spacing between repair blocks
+
+        // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
+        ScrollPane customerScrollPane = new ScrollPane(customerQueue);
+        root.setLeft(customerScrollPane);
+
+        // Create a ScrollPane to hold the repair queue and set it as right of the root BorderPane
+        ScrollPane repairScrollPane = new ScrollPane(repairQueue);
+        root.setCenter(repairScrollPane);
+
+       // anchorPane.get
+
+        // Create sample data for the customer queue (replace with your actual data)
+        List<Customer> customerList = new ArrayList<>();
+        customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
+        customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
+        customerList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
+        customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));
+
+        // Add customer blocks to the customer queue
+        for (Customer customer : customerList) {
+            VBox customerBlock = createCustomerBlock(customer);
+            customerQueue.getChildren().add(customerBlock);
+        }
+
+        // Create sample data for the repair queue (replace with your actual data)
+        List<Customer> repairList = new ArrayList<>();
+        repairList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
+        repairList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
+        repairList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
+        repairList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));
+
+
+        /// Add repair blocks to the repair queue
+        for (Customer computer : repairList) {
+            VBox customerBlock = createCustomerBlock(computer);
+            repairQueue.getChildren().add(customerBlock);
+        }
+
         stage.setTitle("RepairIT");
         stage.setScene(scene);
         stage.show();
     }
+
+    // Helper method to create a customer block
+    private VBox createCustomerBlock(Customer customer) {
+        VBox customerBlock = new VBox();
+        customerBlock.setSpacing(5); // Set spacing between UI components in customer block
+
+        // Create labels to display customer information
+        Label nameLabel = new Label("Name: " + customer.getName() + " " + customer.getName());
+        Label emailLabel = new Label("Email: " + customer.getEmail());
+        Label phoneLabel = new Label("Phone: " + customer.getPhone());
+        Label addressLabel = new Label("Address: " + customer.getAddress());
+        Label computersLabel = new Label("Computer's Label: " + customer.getComputers());
+        Label repairAllTicketsLabel = new Label("Repair Tickets: " + customer.getRepairAllTickets());
+
+        // Create a check-in button for the customer
+        Button checkInButton = new Button("Check In");
+        checkInButton.setOnAction(event -> {
+            // Handle check-in action here (e.g., remove customer from customer queue, add to repair queue)
+            System.out.println("Checking in customer: " + customer.getName() + " " + customer.getName());
+        });
+
+        // Add UI components to customer block
+        customerBlock.getChildren().addAll(nameLabel, emailLabel, phoneLabel,addressLabel, computersLabel, repairAllTicketsLabel,  checkInButton);
+
+        return customerBlock;
+    }
+
+    // Helper method to create a repair block
+    private VBox createRepairBlock(Customer newTicket) {
+        VBox repairBlock = new VBox();
+        repairBlock.setSpacing(5); // Set spacing between UI components in repair block
+
+        // Create labels to display repair ticket information
+        Label computerLabel = new Label("Computer: " + newTicket.getComputers());
+        Label computerIDLabel = new Label("ComputerID: #" + newTicket.getName());
+
+        // Create a repair button for the repair ticket
+        Button repairButton = new Button("Repair");
+        repairButton.setOnAction(event -> {
+         //    Handle repair action here (e.g., remove repair ticket from repair queue, mark as repaired)
+            System.out.println("Repairing computer: " + newTicket.getEmail() + ", Ticket #" + newTicket.getRepairAllTickets());
+        });
+
+        // Add UI components to repair block
+        repairBlock.getChildren().addAll(computerLabel, computerIDLabel, repairButton);
+
+        return repairBlock;
+    }
+
 }

@@ -134,16 +134,16 @@ public class RepairIT extends Application {
         }
 
         // Create sample data for the repair queue (replace with your actual data)
-        List<Customer> repairList = new ArrayList<>();
-        repairList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
-        repairList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
-        repairList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
-        repairList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));
+        List<Computer> repairList = new ArrayList<>();
+        repairList.add(new Computer("John", 1));
+        repairList.add(new Computer("John", 2));
+        repairList.add(new Computer("John", 3));
+        repairList.add(new Computer("John", 4));
 
 
         /// Add repair blocks to the repair queue
-        for (Customer computer : repairList) {
-            VBox customerBlock = createCustomerBlock(computer);
+        for (Computer computer : repairList) {
+            VBox customerBlock = createRepairBlock(computer);
             repairQueue.getChildren().add(customerBlock);
         }
 
@@ -165,11 +165,19 @@ public class RepairIT extends Application {
         Label computersLabel = new Label("Computer's Label: " + customer.getComputers());
         Label repairAllTicketsLabel = new Label("Repair Tickets: " + customer.getRepairAllTickets());
 
+
+       // Button removeButton = new Button("Remove");
+       // removeButton.setOnAction(event -> {
+        //    customerBlock.getChildren().remove(customerBlock);
+       // });
+
         // Create a check-in button for the customer
         Button checkInButton = new Button("Check In");
         checkInButton.setOnAction(event -> {
             // Handle check-in action here (e.g., remove customer from customer queue, add to repair queue)
-            System.out.println("Checking in customer: " + customer.getName() + " " + customer.getName());
+            System.out.println("Checking in customer: " + customer.getName() + " " + customer.getPhone());
+            checkInButton.setText("Checked In");
+            checkInButton.setDisable(true);
         });
 
         // Add UI components to customer block
@@ -179,19 +187,19 @@ public class RepairIT extends Application {
     }
 
     // Helper method to create a repair block
-    private VBox createRepairBlock(Customer newTicket) {
+    private VBox createRepairBlock(Computer computer) {
         VBox repairBlock = new VBox();
         repairBlock.setSpacing(5); // Set spacing between UI components in repair block
 
         // Create labels to display repair ticket information
-        Label computerLabel = new Label("Computer: " + newTicket.getComputers());
-        Label computerIDLabel = new Label("ComputerID: #" + newTicket.getName());
+        Label computerLabel = new Label("Computer: " + computer.getModel());
+        Label computerIDLabel = new Label("Year: " + computer.getYear());
 
         // Create a repair button for the repair ticket
         Button repairButton = new Button("Repair");
         repairButton.setOnAction(event -> {
          //    Handle repair action here (e.g., remove repair ticket from repair queue, mark as repaired)
-            System.out.println("Repairing computer: " + newTicket.getEmail() + ", Ticket #" + newTicket.getRepairAllTickets());
+            System.out.println("Repairing computer: " + computer.getYear() + ", Ticket #" + computer.getYear());
         });
 
         // Add UI components to repair block

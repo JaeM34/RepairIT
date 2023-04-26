@@ -5,7 +5,12 @@ public class Computer {
     private String model;
     private String serialNumber;
     private int year;
+    //create computer constructer initialized by passing arguments through it
 
+    public Computer(String model , int year){
+        this.model = model;
+        this.year = year;
+    }
     public String getComputerID() {return computerID; }
     public String getCustomerID() {return customerID; }
     public String getManufacturer() {return manufacturer; }
@@ -24,3 +29,7 @@ public class Computer {
     }
     // todo: getRepairTickets
 }
+
+
+
+

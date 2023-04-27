@@ -14,7 +14,7 @@ public class RepairTicket {
         // Workflow[] workflows
         String status;
 
-        public RepairTicket() {
+        public RepairTicket(String issue) {
             //todo random unique ID generator 8# check to make ure it doesnt exist
             Set<Integer> idSet = new HashSet<>(); // Set to store generated IDs
             int customerID;

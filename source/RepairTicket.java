@@ -17,12 +17,16 @@ public class RepairTicket {
         public RepairTicket() {
             //todo random unique ID generator 8# check to make ure it doesnt exist
             Set<Integer> idSet = new HashSet<>(); // Set to store generated IDs
-            Random rand = new Random();
             int customerID;
 
-            do {
-                customerID = rand.nextInt(90000000) + 10000000; // Generate random 8-digit number
-            } while (!idSet.add(customerID));
+            while (true) {
+                // Generate random 8-digit number
+                customerID = (int)(Math.random() * 90000000) + 10000000;
+
+                if (idSet.add(customerID)) { // Check if ID already exists in set and add it to the set if it's unique
+                    break;
+                }
+            }
             this.issue = issue;
             this.status = "Open";
             this.workflow = new ArrayList<>();

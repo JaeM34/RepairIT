@@ -21,7 +21,7 @@ public class RepairTicket {
             int customerID;
 
             do {
-                id = rand.nextInt(90000000) + 10000000; // Generate random 8-digit number
+                customerID = rand.nextInt(90000000) + 10000000; // Generate random 8-digit number
             } while (!idSet.add(customerID));
             this.issue = issue;
             this.status = "Open";

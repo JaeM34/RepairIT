@@ -9,7 +9,8 @@ public class Customer {
 
 
     //create customer constructer initialized by passing arguments through it
-    public Customer(String address, String customerID, int phone,String email, String computers, String repairAllTickets ) {
+    public Customer(String name, String address, String customerID, int phone,String email, String computers, String repairAllTickets ) {
+        this.name = name;
         this.address = address;
         this.customerID = customerID;
         this.phone = phone;

@@ -7,6 +7,7 @@ public class Customer {
     private String computers;
     private String repairAllTickets;
 
+
     //create customer constructer initialized by passing arguments through it
     public Customer(String name, String address, String customerID, int phone,String email, String computers, String repairAllTickets ) {
         this.name = name;

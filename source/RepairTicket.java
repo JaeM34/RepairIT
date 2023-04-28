@@ -1,18 +1,17 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class RepairTicket {
-    public class RepairTicket {
+
         private String issue;
         private String status;
         private List<String> workflow;
         int customerID;
-<<<<<<< HEAD
-                Customer customer;
-        Computer computer;
-=======
         Customer customer;
-
->>>>>>> origin/main
+        Computer computer;
         // Workflow[] workflows
-        String status;
 
         public RepairTicket() {
             //todo random unique ID generator 8# check to make ure it doesnt exist

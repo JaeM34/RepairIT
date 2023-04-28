@@ -31,15 +31,15 @@ public class RepairIT extends Application {
         Application.launch();
     }
 
-    public CustomerHandler getCustomerHandler() {
+    public static CustomerHandler getCustomerHandler() {
         return customerHandler;
     }
 
-    public RepairTicketHandler getRepairticketHandler() {
+    public static RepairTicketHandler getRepairticketHandler() {
         return repairticketHandler;
     }
 
-    public ComputerHandler getComputerHandler() {
+    public static ComputerHandler getComputerHandler() {
         return computerHandler;
     }
 
@@ -216,5 +216,7 @@ public class RepairIT extends Application {
 
         return repairBlock;
     }
+
+
 
 }

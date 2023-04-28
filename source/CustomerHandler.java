@@ -3,7 +3,8 @@ public class CustomerHandler {
 
     private static final CustomerSQLDatabase database = new CustomerSQLDatabase();
 
-    public CustomerHandler() {}
+    public CustomerHandler() {
+    }
 
     public void addCustomer() {}
     //todo public Customer getCustomer(String name) {}

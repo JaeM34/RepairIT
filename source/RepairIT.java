@@ -128,10 +128,14 @@ public class RepairIT extends Application {
         stackPane.getChildren().addAll(anchorPane,searchButton);
         // Create sample data for the customer queue (replace with your actual data)
         List<Customer> customerList = new ArrayList<>();
-        customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
-        customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
-        customerList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
-        customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));
+
+        /*
+         * CURRENTLY HIDING THIS BECAUSE I AM FIXING THE VALUES
+         */
+        //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
+        //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
+        //customerList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
+        //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));
 
         // Add customer blocks to the customer queue
         for (Customer customer : customerList) {
@@ -141,10 +145,10 @@ public class RepairIT extends Application {
 
         // Create sample data for the repair queue (replace with your actual data)
         List<Computer> repairList = new ArrayList<>();
-        repairList.add(new Computer("John", 1));
-        repairList.add(new Computer("John", 2));
-        repairList.add(new Computer("John", 3));
-        repairList.add(new Computer("John", 4));
+        //repairList.add(new Computer("John", 1));
+        //repairList.add(new Computer("John", 2));
+        //repairList.add(new Computer("John", 3));
+        //repairList.add(new Computer("John", 4));
 
 
         /// Add repair blocks to the repair queue
@@ -169,7 +173,7 @@ public class RepairIT extends Application {
         Label phoneLabel = new Label("Phone: " + customer.getPhone());
         Label addressLabel = new Label("Address: " + customer.getAddress());
         Label computersLabel = new Label("Computer's Label: " + customer.getComputers());
-        Label repairAllTicketsLabel = new Label("Repair Tickets: " + customer.getRepairAllTickets());
+        Label repairAllTicketsLabel = new Label("Repair Tickets: " + customer.getRepairTickets());
 
        // Button removeButton = new Button("Remove");
        // removeButton.setOnAction(event -> {

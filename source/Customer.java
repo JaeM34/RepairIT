@@ -1,22 +1,22 @@
 public class Customer {
     private String customerID;
     private String name;
-    private int phone;
+    private String phone;
     private String email;
     private String address;
-    private String computers;
-    private String repairAllTickets;
+    private Computer[] computers;
+    private RepairTicket[] repairTickets;
 
 
     //create customer constructer initialized by passing arguments through it
-    public Customer(String name, String address, String customerID, int phone,String email, String computers, String repairAllTickets ) {
+    public Customer(String name, String address, String customerID, String phone, String email, Computer[] computers, RepairTicket[] repairTickets ) {
         this.name = name;
         this.address = address;
         this.customerID = customerID;
         this.phone = phone;
         this.email = email;
         this.computers = computers;
-        this.repairAllTickets = repairAllTickets;
+        this.repairTickets = repairTickets;
     }
 
     public String getCustomerID() {
@@ -27,7 +27,7 @@ public class Customer {
         return name;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -37,10 +37,10 @@ public class Customer {
     public String getAddress() {
         return address;
     }
-    public String getComputers() {
+    public Computer[] getComputers() {
         return computers;
     }
-    public String getRepairAllTickets() {
-        return repairAllTickets;
+    public RepairTicket[] getRepairTickets() {
+        return repairTickets;
     }
 }

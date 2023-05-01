@@ -21,6 +21,26 @@ public class Customer {
         this.computers = computers;
         this.repairTickets = repairTickets;
     }
+    public Customer getCustomer(String name, String address) {
+        Customer customer = CustomerHandler.database.getCustomerByNameAndAddress(name, address);
+        customer.addComputers(RepairIT.getComputerHandler().getComputersbyCustomerID(customer.getCustomerID());
+        customer.addRepairTickets(RepairIT.getComputerHandler().getRepairTicketsByCustomerID(customer.getCustomerID())));
+        return customer;
+    }
+
+    private void addRepairTickets(Object repairTicketsByCustomerID) {
+        this.repairTickets.addAll(repairTickets);
+    }
+
+    private void addComputers(Object computersbyCustomerID) {
+        this.computers.addAll(computers);
+    }
+
+    public Customer(String name, int customerID, String address) {
+        this.name = name;
+        this.customerID = String.valueOf(customerID);
+        this.address = address;
+    }
 
     public String getCustomerID() {
         return customerID;

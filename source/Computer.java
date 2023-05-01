@@ -5,7 +5,7 @@ public class Computer {
     private String model;
     private String serialNumber;
     private int year;
-    //create computer constructer initialized by passing arguments through it
+    //create computer constructor initialized by passing arguments through it
 
     public Computer(String model , int year){
         this.model = model;

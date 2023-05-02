@@ -8,7 +8,7 @@ public class ComputerHandler {
         return null;
     }
 
-    public Object getComputersbyCustomerID(String customerID) {
+    public Object getComputersByCustomerID(String customerID) {
         return null;
     }
 }

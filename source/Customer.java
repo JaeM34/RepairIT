@@ -11,7 +11,7 @@ public class Customer {
     private ArrayList<RepairTicket> repairTickets;
 
 
-    //create customer constructer initialized by passing arguments through it
+    //create customer constructor initialized by passing arguments through it
     public Customer(String name, String address, String customerID, String phone, String email, ArrayList<Computer> computers, ArrayList<RepairTicket> repairTickets ) {
         this.name = name;
         this.address = address;
@@ -23,7 +23,7 @@ public class Customer {
     }
     public Customer getCustomer(String name, String address) {
         Customer customer = CustomerHandler.database.getCustomerByNameAndAddress(name, address);
-        customer.addComputers(RepairIT.getComputerHandler().getComputersbyCustomerID(customer.getCustomerID());
+        customer.addComputers(RepairIT.getComputerHandler().getComputersByCustomerID(customer.getCustomerID());
         customer.addRepairTickets(RepairIT.getComputerHandler().getRepairTicketsByCustomerID(customer.getCustomerID())));
         return customer;
     }

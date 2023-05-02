@@ -14,7 +14,7 @@ public class CustomerHandler {
         database.executeQuery(query);
     }
     //todo public Customer getCustomer(String name) {}
-    public Customer getCustomer(String name) {
+    public Customer getCustomer(String name) throws SQLException {
         String query = "SELECT * FROM customers WHERE name = '" + name + "'";
         ResultSet resultSet = database.executeQuery(query);
         if (resultSet.next()) {
@@ -27,7 +27,7 @@ public class CustomerHandler {
     }
 
     //todo public Customer getCustomer(int ID) {}
-    public Customer getCustomer(int customerID) {
+    public Customer getCustomer(int customerID) throws SQLException {
         String query = "SELECT * FROM customers WHERE id = " + customerID;
         ResultSet resultSet = database.executeQuery(query);
         if (resultSet.next()) {
@@ -39,12 +39,17 @@ public class CustomerHandler {
         }
     }
     //todo public Customer getCustomer(String address) {}
-    public Customer getCustomer(String address) {
+    public Customer getCustomer(String address) throws SQLException {
         String query = "SELECT * FROM customers WHERE address = '" + address + "'";
         ResultSet resultSet = database.executeQuery(query);
         if (resultSet.next()) {
             String name = resultSet.getString("name");
-            int id = resultSet.getInt("id");
+            int id = 0;
+            try {
+                id = resultSet.getInt("id");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             return new Customer(name, id, address);
         } else {
             return null;

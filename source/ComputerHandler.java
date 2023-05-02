@@ -4,7 +4,11 @@ public class ComputerHandler {
 
     public ComputerHandler() {}
 
-    public Object getRepairTicketsByCustomerID(String customerID) {}
+    public Object getRepairTicketsByCustomerID(String customerID) {
+        return null;
+    }
 
-    public Object getComputersbyCustomerID(String customerID) {}
+    public Object getComputersbyCustomerID(String customerID) {
+        return null;
+    }
 }

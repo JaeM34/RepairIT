@@ -32,7 +32,7 @@ public class Customer {
         this.repairTickets.addAll(repairTickets);
     }
 
-    private void addComputers(Object computersbyCustomerID) {
+    private void addComputers(Object computersByCustomerID) {
         this.computers.addAll(computers);
     }
 

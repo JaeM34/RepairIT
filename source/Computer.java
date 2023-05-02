@@ -7,6 +7,16 @@ public class Computer {
     private int year;
     //create computer constructor initialized by passing arguments through it
 
+
+    public Computer(String computerID, String customerID, String manufacturer, String model, String serialNumber, int year) {
+        this.computerID = computerID;
+        this.customerID = customerID;
+        this.manufacturer = manufacturer;
+        this.model = model;
+        this.serialNumber = serialNumber;
+        this.year = year;
+    }
+
     public Computer(String model , int year){
         this.model = model;
         this.year = year;

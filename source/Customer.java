@@ -21,12 +21,15 @@ public class Customer {
         this.computers = computers;
         this.repairTickets = repairTickets;
     }
+    /*
     public Customer getCustomer(String name, String address) {
         Customer customer = CustomerHandler.database.getCustomerByNameAndAddress(name, address);
         customer.addComputers(RepairIT.getComputerHandler().getComputersByCustomerID(customer.getCustomerID());
         customer.addRepairTickets(RepairIT.getComputerHandler().getRepairTicketsByCustomerID(customer.getCustomerID())));
         return customer;
     }
+
+     */
 
     private void addRepairTickets(Object repairTicketsByCustomerID) {
         this.repairTickets.addAll(repairTickets);

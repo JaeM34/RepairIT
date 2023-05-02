@@ -5,10 +5,10 @@ public class ComputerHandler {
     public ComputerHandler() {}
 
     public void addComputer(Computer computer){
-        string ID = computer.getComputerID();
-        string customerID = computer.getCustomerID();
-        string manufacturer = computer.getManufacturer();
-        string serialNumber = computer.getSerialNumber();
+        String ID = computer.getComputerID();
+        String customerID = computer.getCustomerID();
+        String manufacturer = computer.getManufacturer();
+        String serialNumber = computer.getSerialNumber();
         int year = computer.getYear();
     }
 

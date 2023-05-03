@@ -4,15 +4,17 @@ public class RepairTicketHandler {
 
     private static final RepairTicketSQLDatabase database = new RepairTicketSQLDatabase();
 
-    public RepairTicketHandler() {
+    public RepairTicketHandler() {}
 
+    public void saveRepairTicket(RepairTicket repairTicket) {
+        database.saveRepairTicket(repairTicket);
     }
 
-    public ArrayList<RepairTicket> getRepairTicketOnComputer(String computerID) {
+    public ArrayList<RepairTicket> getRepairTicketsOnComputer(String computerID) {
         return database.getRepairTicketByComputerID(computerID);
     }
 
-    public ArrayList<RepairTicket> getRepairTicketOnCustomer(String customerID) {
+    public ArrayList<RepairTicket> getRepairTicketsOnCustomer(String customerID) {
         return database.getRepairTicketByCustomerID(customerID);
     }
 

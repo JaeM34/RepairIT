@@ -1,29 +1,24 @@
+import java.util.ArrayList;
+
 public class ComputerHandler {
 
     private static final ComputerSQLDatabase database = new ComputerSQLDatabase();
 
     public ComputerHandler() {}
 
-    public void addComputer(Computer computer){
-        String ID = computer.getComputerID();
-        String customerID = computer.getCustomerID();
-        String manufacturer = computer.getManufacturer();
-        String serialNumber = computer.getSerialNumber();
-        int year = computer.getYear();
+    public void saveComputer(Computer computer) {
+        database.saveComputer(computer);
     }
 
-    // todo: SearchByID()
-
-    // todo: searchBySerialNumber()
-
-    // todo: getComputersByOwner()
-
-    // todo: editComputer()
-    public Object getRepairTicketsByCustomerID(String customerID) {
-        return null;
+    public Computer getComputerByID(String computerID) {
+        return database.getComputerByComputerID(computerID);
     }
 
-    public Object getComputersByCustomerID(String customerID) {
-        return null;
+    public Computer getComputerBySerialNumber(String serial) {
+        return database.getComputerBySerialNumber(serial);
+    }
+
+    public ArrayList<Computer> getComputersByCustomerID(String customerID) {
+        return database.getComputersByCustomerID(customerID);
     }
 }

@@ -115,4 +115,8 @@ public class RepairTicketSQLDatabase {
         }
         return null;
     }
+
+    public void saveRepairTicket(RepairTicket repairTicket) {
+        //todo
+    }
 }

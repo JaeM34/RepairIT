@@ -69,4 +69,28 @@ public class Customer {
     public ArrayList<RepairTicket> getRepairTickets() {
         return repairTickets;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setComputers(ArrayList<Computer> computers) {
+        this.computers = computers;
+    }
+
+    public void setRepairTickets(ArrayList<RepairTicket> repairTickets) {
+        this.repairTickets = repairTickets;
+    }
 }

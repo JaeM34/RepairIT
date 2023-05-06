@@ -73,11 +73,25 @@ public class RepairIT extends Application {
         Text repairText = new Text("Repair Queue");
         repairText.setFont(textFont);
 
-        // Create a button
-        Button searchButton = new Button("Search Customer");
+        // Search Customer button made
+        Button customerSearchButton = new Button("Search Customer");
         Font font = Font.font("Arial", FontWeight.BOLD, 16);
-        searchButton.setFont(font);
-        searchButton.setOnAction(actionEvent -> {
+        customerSearchButton.setFont(font);
+        customerSearchButton.setOnAction(actionEvent -> {
+            System.out.println("button clicked");
+        });
+
+        // Search Computer button made
+        Button computerSearchButton = new Button("Search Computer");
+        computerSearchButton.setFont(font);
+        computerSearchButton.setOnAction(actionEvent -> {
+            System.out.println("button clicked");
+        });
+
+        // Search RepairTicket button made
+        Button repairSearchButton = new Button("Search RepairTicket");
+        repairSearchButton.setFont(font);
+        repairSearchButton.setOnAction(actionEvent -> {
             System.out.println("button clicked");
         });
 
@@ -89,10 +103,18 @@ public class RepairIT extends Application {
         AnchorPane.setRightAnchor(repairText, 100.0); // Set right anchor for Button 2
 
 
-        StackPane.setAlignment(searchButton, Pos.TOP_CENTER);
+        StackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
         // Bind the size of the button to the size of the rectangle
-        searchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        searchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
+        customerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
+        customerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
+        StackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
+        // Bind the size of the button to the size of the rectangle
+        computerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
+        computerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
+        StackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
+        // Bind the size of the button to the size of the rectangle
+        repairSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
+        repairSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
 
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
@@ -123,9 +145,11 @@ public class RepairIT extends Application {
         AnchorPane.setRightAnchor(repairScrollPane, 10.0); // Set right anchor for repairScrollPane
 
         // Adds UI elements to scene
-        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane,customerText, repairText, searchButton);
+        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, customerText, repairText, computerSearchButton,
+                repairSearchButton, customerSearchButton);
         // Places UI elements on top of the rectangle
-        stackPane.getChildren().addAll(anchorPane,searchButton);
+        stackPane.getChildren().addAll(anchorPane,repairSearchButton, computerSearchButton, customerSearchButton);
+        stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392 ));
         // Create sample data for the customer queue (replace with your actual data)
         List<Customer> customerList = new ArrayList<>();
 

@@ -5,7 +5,17 @@ public class Computer {
     private String model;
     private String serialNumber;
     private int year;
-    //create computer constructer initialized by passing arguments through it
+    //create computer constructor initialized by passing arguments through it
+
+
+    public Computer(String computerID, String customerID, String manufacturer, String model, String serialNumber, int year) {
+        this.computerID = computerID;
+        this.customerID = customerID;
+        this.manufacturer = manufacturer;
+        this.model = model;
+        this.serialNumber = serialNumber;
+        this.year = year;
+    }
 
     public Computer(String model , int year){
         this.model = model;

@@ -5,13 +5,21 @@ import java.util.Set;
 
 public class RepairTicket {
 
+    private String id;
+    String customerID;
+    String computerID;
     private String issue;
     private String status;
     private List<String> workflow;
-    int customerID;
-    Customer customer;
-    Computer computer;
     // Workflow[] workflows
+
+    public RepairTicket(String id, String customerID, String computerID, String issue, String status) {
+        this.id = id;
+        this.customerID = customerID;
+        this.computerID = computerID;
+        this.issue = issue;
+        this.status = status;
+    }
 
     public RepairTicket() {
         //todo random unique ID generator 8# check to make ure it doesnt exist
@@ -29,6 +37,10 @@ public class RepairTicket {
         this.issue = issue;
         this.status = "Open";
         this.workflow = new ArrayList<>();
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public String GetIssue() {

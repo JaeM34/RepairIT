@@ -1,23 +1,18 @@
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,8 +127,8 @@ public class RepairIT extends Application {
         /*
          * CURRENTLY HIDING THIS BECAUSE I AM FIXING THE VALUES
          */
-        //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
-        //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
+        //customerList.add(new Customer("Terry" , )
+        //customerList.add(new Customer("John", "Doe","ID" , "wHY" , "je", 23,));
         //customerList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
         //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));
 
@@ -145,10 +140,10 @@ public class RepairIT extends Application {
 
         // Create sample data for the repair queue (replace with your actual data)
         List<Computer> repairList = new ArrayList<>();
-        //repairList.add(new Computer("John", 1));
-        //repairList.add(new Computer("John", 2));
-        //repairList.add(new Computer("John", 3));
-        //repairList.add(new Computer("John", 4));
+        repairList.add(new Computer("Johnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn", 1));
+        repairList.add(new Computer("John", 2));
+        repairList.add(new Computer("John", 3));
+        repairList.add(new Computer("John", 4));
 
 
         /// Add repair blocks to the repair queue
@@ -175,10 +170,10 @@ public class RepairIT extends Application {
         Label computersLabel = new Label("Computer's Label: " + customer.getComputers());
         Label repairAllTicketsLabel = new Label("Repair Tickets: " + customer.getRepairTickets());
 
-       // Button removeButton = new Button("Remove");
-       // removeButton.setOnAction(event -> {
-        //    customerBlock.getChildren().remove(customerBlock);
-       // });
+        Button removeButton = new Button("Remove");
+        removeButton.setOnAction(event -> {
+            customerBlock.getChildren().remove(customerBlock);
+        });
 
         // Create a check-in button for the customer
         Button checkInButton = new Button("Check In");
@@ -190,7 +185,7 @@ public class RepairIT extends Application {
         });
 
         // Add UI components to customer block
-        customerBlock.getChildren().addAll(nameLabel, emailLabel, phoneLabel,addressLabel, computersLabel, repairAllTicketsLabel,  checkInButton);
+        customerBlock.getChildren().addAll(nameLabel, emailLabel, phoneLabel,addressLabel, computersLabel, repairAllTicketsLabel,  checkInButton, removeButton);
 
         return customerBlock;
     }
@@ -203,7 +198,9 @@ public class RepairIT extends Application {
         // Create labels to display repair ticket information
         Label computerLabel = new Label("Computer: " + computer.getModel());
         Label computerIDLabel = new Label("Year: " + computer.getYear());
-
+        Separator separator = new Separator();
+        separator.setPrefWidth(300); // Set the width of the separator to match the customer block width
+        separator.setStyle("-fx-border-color: black;");
         // Create a repair button for the repair ticket
         Button repairButton = new Button("Repair");
         repairButton.setOnAction(event -> {
@@ -211,12 +208,13 @@ public class RepairIT extends Application {
             System.out.println("Repairing computer: " + computer.getYear() + ", Ticket #" + computer.getYear());
         });
 
+        Button removeButton = new Button("Remove");
+            removeButton.setOnAction(event -> {
+                ((Pane)repairBlock.getParent()).getChildren().remove(repairBlock);
+            });
         // Add UI components to repair block
-        repairBlock.getChildren().addAll(computerLabel, computerIDLabel, repairButton);
-
+        repairBlock.getChildren().addAll(computerLabel, computerIDLabel, repairButton, removeButton, separator);
         return repairBlock;
     }
-
-
 
 }

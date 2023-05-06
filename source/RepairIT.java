@@ -65,13 +65,16 @@ public class RepairIT extends Application {
         // Adds rectangle as the base layer
         stackPane.getChildren().add(rectangle);
 
-        // Create a text node
+        // Create nodes for the 3 queues
         Text customerText = new Text("Customer Queue");
         Font textFont = Font.font("Arial", FontWeight.BOLD, 20); // Replace with desired font, weight, and size
         customerText.setFont(textFont);
 
         Text repairText = new Text("Repair Queue");
         repairText.setFont(textFont);
+
+        Text searchText = new Text("Search - Customer");
+        searchText.setFont(textFont);
 
         // Search Customer button made
         Button customerSearchButton = new Button("Search Customer");
@@ -96,12 +99,14 @@ public class RepairIT extends Application {
         });
 
         // sets coordinates for customer Queue text
-        AnchorPane.setTopAnchor(customerText, 10.0); // Set top anchor for CUSTOMER Queue Text
-        AnchorPane.setLeftAnchor(customerText, 100.0); // Set right anchor for Button 2
+        AnchorPane.setTopAnchor(customerText, 75.0); // Set top anchor for CUSTOMER Queue Text
+        AnchorPane.setLeftAnchor(customerText, 70.0); // Set right anchor for Button 2
         // sets coordinates for Repair Queue Text
-        AnchorPane.setTopAnchor(repairText, 10.0); // Set top anchor for CUSTOMER Queue Text
-        AnchorPane.setRightAnchor(repairText, 100.0); // Set right anchor for Button 2
-
+        AnchorPane.setTopAnchor(repairText, 75.0); // Set top anchor for CUSTOMER Queue Text
+        AnchorPane.setRightAnchor(repairText, 85.0); // Set right anchor for Button 2
+        // sets coordinates for Search - Customer
+        AnchorPane.setTopAnchor(searchText, 75.0); // Set top anchor for CUSTOMER Queue Text
+        AnchorPane.setRightAnchor(searchText, 400.0); // Set right anchor for Button 2
 
         StackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
         // Bind the size of the button to the size of the rectangle
@@ -125,6 +130,9 @@ public class RepairIT extends Application {
         // Create a VBox for the repair queue
         VBox repairQueue = new VBox();
         repairQueue.setSpacing(10); // Set spacing between repair blocks
+        // Create a VBox for the search queue
+        VBox searchQueue = new VBox();
+        searchQueue.setSpacing(10); // Set spacing between repair blocks
 
         // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
         ScrollPane customerScrollPane = new ScrollPane(customerQueue);
@@ -132,21 +140,28 @@ public class RepairIT extends Application {
         customerScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
         //customerScrollPane.setPrefSize(300, 400);
         // sets coordinates for the customerScrollPane
-        AnchorPane.setTopAnchor(customerScrollPane, 70.0); // Set top anchor for customerScrollPane
+        AnchorPane.setTopAnchor(customerScrollPane, 100.0); // Set top anchor for customerScrollPane
         AnchorPane.setLeftAnchor(customerScrollPane, 10.0); // Set left anchor for customerScrollPane
 
         // Create a ScrollPane to hold the repair queue and set it as right of the root BorderPane
         ScrollPane repairScrollPane = new ScrollPane(repairQueue);
         repairScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
         repairScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
-
         // Formats the Repair Queue
-        AnchorPane.setTopAnchor(repairScrollPane, 70.0); // Set top anchor for repairScrollPane
+        AnchorPane.setTopAnchor(repairScrollPane, 100.0); // Set top anchor for repairScrollPane
         AnchorPane.setRightAnchor(repairScrollPane, 10.0); // Set right anchor for repairScrollPane
 
+        // Create a ScrollPane to hold the search queue at the center of the BorderPane
+        ScrollPane searchScrollPane = new ScrollPane(searchQueue);
+        searchScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
+        searchScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
+        // Formats the Search Queue
+        AnchorPane.setTopAnchor(searchScrollPane, 100.0); // Set top anchor for repairScrollPane
+        AnchorPane.setRightAnchor(searchScrollPane, 340.0); // Set right anchor for repairScrollPane
+
         // Adds UI elements to scene
-        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, customerText, repairText, computerSearchButton,
-                repairSearchButton, customerSearchButton);
+        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText,
+                searchText, computerSearchButton, repairSearchButton, customerSearchButton);
         // Places UI elements on top of the rectangle
         stackPane.getChildren().addAll(anchorPane,repairSearchButton, computerSearchButton, customerSearchButton);
         stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392 ));

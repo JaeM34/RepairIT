@@ -121,13 +121,14 @@ public class RepairIT extends Application {
         anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane,customerText, repairText, searchButton);
         // Places UI elements on top of the rectangle
         stackPane.getChildren().addAll(anchorPane,searchButton);
+
         // Create sample data for the customer queue (replace with your actual data)
         List<Customer> customerList = new ArrayList<>();
 
         /*
          * CURRENTLY HIDING THIS BECAUSE I AM FIXING THE VALUES
          */
-        //customerList.add(new Customer("Terry" , )
+        
         //customerList.add(new Customer("John", "Doe","ID" , "wHY" , "je", 23,));
         //customerList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
         //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));

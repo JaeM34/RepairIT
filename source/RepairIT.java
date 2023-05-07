@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -43,6 +44,8 @@ public class RepairIT extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
         Scene scene = new Scene(root, 1000, 600);
@@ -281,47 +284,129 @@ public class RepairIT extends Application {
 
         // Add UI components to repair block
         repairBlock.getChildren().addAll(computerLabel, computerIDLabel, repairButton, removeButton);
-
         return repairBlock;
     }
 
-
     private Scene createRepairScene(Computer computer) {
-        // Create a new pane for the customer scene
-        Pane repairPane = new Pane();
-        repairPane.setPadding(new Insets(10));
-        Scene customerScene = new Scene(repairPane, 1000, 600);
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(10));
+        GridPane grid = new GridPane();
+        // Customer Name
+        Label nameLabel = new Label("Name:");
+        TextField nameField = new TextField();
+        vbox.getChildren().addAll(nameLabel, nameField);
+
+        // Customer Address
+        Label addressLabel = new Label("Address:");
+        TextField addressField = new TextField();
+        vbox.getChildren().addAll(addressLabel, addressField);
+
+        // Search Customer Button
+        Button searchButton = new Button("Search Customer");
+        grid.add(searchButton, 2, 2);
+        searchButton.setOnAction(e -> {
+            String name = nameField.getText();
+            String address = addressField.getText();
+
+            Customer customer = customerHandler.getCustomerByNameAndAddress(name, address);
+            if (customer != null) {
+                Label resultLabel = new Label("Customer Found:\nName: " + customer.getName() + "\nPhone: " + customer.getPhone() + "\nAddress: " + customer.getAddress() + "\nEmail: " + customer.getEmail());
+                vbox.getChildren().add(resultLabel);
+            } else {
+                Label resultLabel = new Label("Customer Not Found");
+                vbox.getChildren().add(resultLabel);
+            }
+            // Clear fields
+            nameField.clear();
+            addressField.clear();
+        });
 
         // Add UI components and logic for the customer scene here
-
         Button backButton = new Button("Back");
         backButton.setOnAction(event -> {
             Stage primaryStage = (Stage) backButton.getScene().getWindow();
             primaryStage.setScene(createMainScene());
         });
+        vbox.getChildren().addAll(backButton, searchButton);
 
-        repairPane.getChildren().add(backButton);
-        return customerScene;
-    }
-
+        Scene scene = new Scene(vbox, 1000, 600);
+        return scene;
+        }
 
     private Scene createCustomerScene() {
-        // Create a new pane for the customer scene
-        Pane customerPane = new Pane();
-        customerPane.setPadding(new Insets(10));
-        Scene customerScene = new Scene(customerPane, 1000, 600);
 
-        // Add UI components and logic for the customer scene here
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10));
+        grid.setVgap(10);
+        grid.setHgap(10);
 
+// Customer Name
+        Label nameLabel = new Label("Name:");
+        TextField nameField = new TextField();
+        grid.add(nameLabel, 0, 0);
+        grid.add(nameField, 1, 0);
+
+// Phone Number
+        Label phoneLabel = new Label("Phone Number:");
+        TextField phoneField = new TextField();
+        grid.add(phoneLabel, 0, 1);
+        grid.add(phoneField, 1, 1);
+
+// Address
+        Label addressLabel = new Label("Address:");
+        TextField addressField = new TextField();
+        grid.add(addressLabel, 0, 2);
+        grid.add(addressField, 1, 2);
+
+// Email
+        Label emailLabel = new Label("Email:");
+        TextField emailField = new TextField();
+        grid.add(emailLabel, 0, 3);
+        grid.add(emailField, 1, 3);
+
+// Add Customer Button
+        Button addCustomerButton = new Button("Add Customer");
+        grid.add(addCustomerButton, 1, 4);
+        addCustomerButton.setOnAction(e -> {
+            String name = nameField.getText();
+            String phone = phoneField.getText();
+            String address = addressField.getText();
+            String email = emailField.getText();
+
+            // Create empty lists for computers and repair tickets
+            ArrayList<Computer> computers = new ArrayList<>();
+            ArrayList<RepairTicket> repairTickets = new ArrayList<>();
+
+            Customer customer = new Customer(name, address, "", phone, email, computers, repairTickets);
+            customerHandler.saveCustomer(customer);
+
+            System.out.println("Customer added successfully!");
+            // Clear fields
+            nameField.clear();
+            phoneField.clear();
+            addressField.clear();
+            emailField.clear();
+        });
+        Button addComputerButton = new Button("Add Computer");
+        addComputerButton.setOnAction(e -> {
+            Stage primaryStage = (Stage) addComputerButton.getScene().getWindow();
+            primaryStage.setScene(createAddComputerPage());
+        });
+        grid.add(addComputerButton, 2, 4); // Add the button to the grid at the desired position
+
+
+        // Add UI components and logic for the search scene here
         Button backButton = new Button("Back");
         backButton.setOnAction(event -> {
             Stage primaryStage = (Stage) backButton.getScene().getWindow();
             primaryStage.setScene(createMainScene());
         });
 
-        customerPane.getChildren().add(backButton);
-        return customerScene;
+        grid.add(backButton, 0, 4);
+        Scene scene = new Scene(grid, 1000, 600);
+        return scene;
     }
+
 
     private Scene createMainScene() {
         BorderPane root = new BorderPane();
@@ -438,6 +523,35 @@ public class RepairIT extends Application {
         AnchorPane.setTopAnchor(searchScrollPane, 100.0); // Set top anchor for repairScrollPane
         AnchorPane.setRightAnchor(searchScrollPane, 340.0); // Set right anchor for repairScrollPane
 
+
+
+
+        // Text for center pane
+        Font subtextFont = Font.font("Arial", FontWeight.NORMAL, 12);
+        Text phoneNumber = new Text("Phone Number");
+        phoneNumber.setFont(subtextFont);
+        Text nameAndAddress = new Text("Name and Address");
+        nameAndAddress.setFont(subtextFont);
+
+        //fields to enter info to search for customer with
+        TextField searchField1 = new TextField();
+        TextField searchField2 = new TextField();
+
+        // Search button made
+        Button searchButton = new Button("Search");
+        searchButton.setFont(subtextFont);
+        searchButton.setOnAction(actionEvent -> {
+            System.out.println("search button clicked");
+        });
+
+        // Set up for center pane
+        searchQueue.setAlignment(Pos.TOP_LEFT);
+        searchQueue.getChildren().addAll(phoneNumber, searchField1, nameAndAddress, searchField2, searchButton);
+
+
+
+
+
         // Adds UI elements to scene
         anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton);
         // Places UI elements on top of the rectangle
@@ -449,7 +563,13 @@ public class RepairIT extends Application {
         /*
          * CURRENTLY HIDING THIS BECAUSE I AM FIXING THE VALUES
          */
-        customerList.add(new Customer("John", 2, "Somewhere"));
+
+        // Create empty lists for computers and repair tickets
+        ArrayList<Computer> computers = new ArrayList<>();
+        ArrayList<RepairTicket> repairTickets = new ArrayList<>();
+
+
+        customerList.add(new Customer("name", "address", "3", "phone", "email",computers ,repairTickets));
         //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
         //customerList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
         //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));
@@ -474,11 +594,8 @@ public class RepairIT extends Application {
             repairQueue.getChildren().add(customerBlock);
         }
 
-
         return scene;
     }
-
-
     private Scene createAddComputerPage(){  // temporary windows for each page
         // Create a new pane for the customer scene
         Pane customerPane = new Pane();
@@ -490,7 +607,6 @@ public class RepairIT extends Application {
         return customerScene;
 
     }
-
     private Scene createComputerPage(){   // temporary windows for each page
         // Create a new pane for the customer scene
         Pane customerPane = new Pane();
@@ -501,7 +617,6 @@ public class RepairIT extends Application {
 
         return customerScene;
     }
-
     private Scene createCreateRepairTicketPage(){  // temporary windows for each page
         // Create a new pane for the customer scene
         Pane customerPane = new Pane();
@@ -523,6 +638,5 @@ public class RepairIT extends Application {
 
         return customerScene;
     }
-
 
 }

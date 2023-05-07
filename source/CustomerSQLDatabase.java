@@ -39,7 +39,7 @@ public class CustomerSQLDatabase {
                     " phone_number INT(10)," +
                     " address VARCHAR(100)," +
                     " email VARCHAR (100)" +
-                    ")" );
+                    ")");
             ps.executeUpdate();
             ps.close();
             System.out.println("Created Customer table");
@@ -50,10 +50,10 @@ public class CustomerSQLDatabase {
         }
     }
 
-    public void saveCustomer (Customer customer) {
+    public void saveCustomer(Customer customer) {
         try {
             PreparedStatement ps;
-            if(customerExist(customer)) {
+            if (customerExist(customer)) {
                 ps = c.prepareStatement("UPDATE Customer SET " +
                         " name =?," +
                         " phone_number =?," +
@@ -127,7 +127,7 @@ public class CustomerSQLDatabase {
             ResultSet rs = ps.executeQuery();
             Customer[] customers = new Customer[rs.getFetchSize()];
             int c = 0;
-            while(rs.next()) {
+            while (rs.next()) {
                 customers[0] = new Customer(rs.getString(2), rs.getString(4), rs.getString(1), rs.getString(3), rs.getString(5), null, null);
                 c++;
             }
@@ -142,9 +142,8 @@ public class CustomerSQLDatabase {
     }
 
     public Customer getCustomerByNameAndAddress(String name, String address) {
-        try {
-            PreparedStatement ps = c.prepareStatement("SELECT * FROM Customer WHERE name=? AND address=? VALUES " +
-                    "(?, ?)");
+        try
+                (PreparedStatement ps = c.prepareStatement("SELECT * FROM Customer WHERE name=? AND address=?")){
             ps.setString(1, name);
             ps.setString(2, address);
             ResultSet rs = ps.executeQuery();

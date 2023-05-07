@@ -17,7 +17,8 @@ public class CustomerHandler {
         return customerBuilder(database.getCustomerByID(customerID));
     }
     public Customer getCustomerByNameAndAddress(String name, String address) {
-        return customerBuilder(database.getCustomerByNameAndAddress(name, address));
+
+         return customerBuilder(database.getCustomerByNameAndAddress(name, address));
     }
 
     public Customer[] getCustomersByPhone(String phone) {

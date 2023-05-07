@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.PopupWindow;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -156,6 +157,27 @@ public class RepairIT extends Application {
         AnchorPane.setTopAnchor(searchScrollPane, 100.0); // Set top anchor for repairScrollPane
         AnchorPane.setRightAnchor(searchScrollPane, 340.0); // Set right anchor for repairScrollPane
 
+        // Text for center pane
+        Font subtextFont = Font.font("Arial", FontWeight.NORMAL, 12);
+        Text phoneNumber = new Text("Phone Number");
+        phoneNumber.setFont(subtextFont);
+        Text nameAndAddress = new Text("Name and Address");
+        nameAndAddress.setFont(subtextFont);
+
+        //fields to enter info to search for customer with
+        TextField searchField1 = new TextField();
+        TextField searchField2 = new TextField();
+
+        // Search button made
+        Button searchButton = new Button("Search");
+        searchButton.setFont(subtextFont);
+        searchButton.setOnAction(actionEvent -> {
+            System.out.println("search button clicked");
+        });
+
+        // Set up for center pane
+        searchQueue.setAlignment(Pos.TOP_LEFT);
+        searchQueue.getChildren().addAll(phoneNumber, searchField1, nameAndAddress, searchField2, searchButton);
         // Adds UI elements to scene
         anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText,
                 searchText, computerSearchButton, repairSearchButton, customerSearchButton);
@@ -165,10 +187,12 @@ public class RepairIT extends Application {
         // Create sample data for the customer queue (replace with your actual data)
         List<Customer> customerList = new ArrayList<>();
 
+
         /*
          * CURRENTLY HIDING THIS BECAUSE I AM FIXING THE VALUES
          */
-        customerList.add(new Customer("John", 2, "Somewhere"));
+        customerList.add(new Customer("John Smith", "Somewhere", "12345678",
+                "(323)555-1234", "my@mail.com", null, null));
         //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2" , "repairtickets"));
         //customerList.add(new Customer("John", "Doe","id" , 123 , "je" ,"2" , "repairtickets"));
         //customerList.add(new Customer("John", "Doe","ID" , 123 , "je" ,"2", "repairtickcts"));
@@ -185,7 +209,6 @@ public class RepairIT extends Application {
         repairList.add(new Computer("John", 2));
         repairList.add(new Computer("John", 3));
         repairList.add(new Computer("John", 4));
-
 
         /// Add repair blocks to the repair queue
         for (Computer computer : repairList) {
@@ -204,12 +227,8 @@ public class RepairIT extends Application {
         customerBlock.setSpacing(5); // Set spacing between UI components in customer block
 
         // Create labels to display customer information
-        Label nameLabel = new Label("Name: " + customer.getName() + " " + customer.getName());
-        Label emailLabel = new Label("Email: " + customer.getEmail());
-        Label phoneLabel = new Label("Phone: " + customer.getPhone());
-        Label addressLabel = new Label("Address: " + customer.getAddress());
-        Label computersLabel = new Label("Computer's Label: " + customer.getComputers());
-        Label repairAllTicketsLabel = new Label("Repair Tickets: " + customer.getRepairTickets());
+        Label nameLabel = new Label(customer.getName());
+        Label phoneLabel = new Label(customer.getPhone());
 
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(event -> {
@@ -234,7 +253,7 @@ public class RepairIT extends Application {
         });
 
         // Add UI components to customer block
-        customerBlock.getChildren().addAll(nameLabel, emailLabel, phoneLabel, addressLabel, computersLabel, repairAllTicketsLabel, checkInButton, removeButton, viewCustomer);
+        customerBlock.getChildren().addAll(nameLabel, phoneLabel, checkInButton, removeButton, viewCustomer);
         return customerBlock;
     }
 

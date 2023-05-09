@@ -117,6 +117,16 @@ public class RepairTicketSQLDatabase {
     }
 
     public void saveRepairTicket(RepairTicket repairTicket) {
-        //todo
+        try {
+            PreparedStatement ps = c.prepareStatement("UPDATE RepairTicket SET" +
+                    " ISSUE = ?," +
+                    " STATUS = ?");
+            ps.setString(1, repairTicket.GetIssue());
+            ps.setString(2, repairTicket.GetStatus());
+        } catch (SQLException e) {
+            System.err.println(("Erorr while saving repair ticket " + repairTicket.getId()));
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
     }
 }

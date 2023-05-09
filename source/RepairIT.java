@@ -556,7 +556,7 @@ public class RepairIT extends Application {
         Customer customer3 = new Customer("Joe", "Mama", "12345678",
                 "(323)555-1234", "my@mail.com", null, null);
 
-        CustomerHandler addCustomer = new CustomerHandler();
+        CustomerHandler addCustomer = getCustomerHandler();
         addCustomer.saveCustomer(customer1);
         addCustomer.saveCustomer(customer2);
         addCustomer.saveCustomer(customer3);
@@ -570,7 +570,7 @@ public class RepairIT extends Application {
             VBox customerBlock = createCustomerBlock(customer);
             customerQueue.getChildren().add(customerBlock);
         }
-        ComputerHandler addComputer = new ComputerHandler();
+        ComputerHandler addComputer = getComputerHandler();
         Computer computer = new Computer("123","321", "manufacturer", "Dell","Serial number" , 2023 );
         Computer computer1 = new Computer("123","321", "manufacturer", "Dell","Serial number" , 2023 );
         Computer computer2 = new Computer("123","321", "manufacturer", "Dell","Serial number" , 2023 );
@@ -1308,7 +1308,7 @@ public class RepairIT extends Application {
                 "(323)555-1234", "my@mail.com", null, null);
 
 
-        CustomerHandler addCustomer = new CustomerHandler();
+        CustomerHandler addCustomer = getCustomerHandler();
         addCustomer.saveCustomer(customer1);
         addCustomer.saveCustomer(customer2);
         addCustomer.saveCustomer(customer3);
@@ -1515,7 +1515,7 @@ public class RepairIT extends Application {
                 "(323)555-1234", "my@mail.com", null, null);
 
 
-        CustomerHandler addCustomer = new CustomerHandler();
+        CustomerHandler addCustomer = getCustomerHandler();
         addCustomer.saveCustomer(customer1);
         addCustomer.saveCustomer(customer2);
         addCustomer.saveCustomer(customer3);

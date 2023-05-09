@@ -556,7 +556,6 @@ public class RepairIT extends Application {
         Customer customer3 = new Customer("Joe", "Mama", "12345678",
                 "(323)555-1234", "my@mail.com", null, null);
 
-
         CustomerHandler addCustomer = new CustomerHandler();
         addCustomer.saveCustomer(customer1);
         addCustomer.saveCustomer(customer2);
@@ -865,7 +864,6 @@ public class RepairIT extends Application {
         anchorPane.getChildren().addAll(hbox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox);
         // Places UI elements on top of the rectangle
         stackPane.getChildren().addAll(anchorPane,computerSearchButton, repairSearchButton, customerSearchButton );
-
 
         return scene;
     }

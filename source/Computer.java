@@ -17,10 +17,7 @@ public class Computer {
         this.year = year;
     }
 
-    public Computer(String model , int year){
-        this.model = model;
-        this.year = year;
-    }
+
     public String getComputerID() {return computerID; }
     public String getCustomerID() {return customerID; }
     public String getManufacturer() {return manufacturer; }

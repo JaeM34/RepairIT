@@ -119,10 +119,16 @@ public class RepairTicketSQLDatabase {
     public void saveRepairTicket(RepairTicket repairTicket) {
         try {
             PreparedStatement ps = c.prepareStatement("UPDATE RepairTicket SET" +
-                    " ISSUE = ?," +
+                    " ID = ?," +
+                    " CustomerID = ?," +
+                    " ComputerID = ?," +
+                    " ISSUE TEXT = ?," +
                     " STATUS = ?");
-            ps.setString(1, repairTicket.GetIssue());
-            ps.setString(2, repairTicket.GetStatus());
+            ps.setString(1, repairTicket.getId());
+            ps.setString(2, repairTicket.customerID);
+            ps.setString(3, repairTicket.getId());
+            ps.setString(4, repairTicket.GetIssue());
+            ps.setString(5, repairTicket.GetStatus());
         } catch (SQLException e) {
             System.err.println(("Erorr while saving repair ticket " + repairTicket.getId()));
             System.err.println(e.getClass().getName() + ": " + e.getMessage());

@@ -549,11 +549,11 @@ public class RepairIT extends Application {
 
         // Create sample data for the customer queue (replace with your actual data)
 
-        Customer customer1 = new Customer("John", "Here", "12345678",
+        Customer customer1 = new Customer("John", "Here", "1234568",
                 "(323)555-1234", "my@mail.com", null, null);
-        Customer customer2 = new Customer("John Smith", "Somewhere", "12345678",
+        Customer customer2 = new Customer("John Smith", "Somewhere", "1235678",
                 "(323)555-1234", "my@mail.com", null, null);
-        Customer customer3 = new Customer("Joe", "Mama", "12345678",
+        Customer customer3 = new Customer("Joe", "Mama", "1234567",
                 "(323)555-1234", "my@mail.com", null, null);
 
         CustomerHandler addCustomer = getCustomerHandler();
@@ -571,19 +571,40 @@ public class RepairIT extends Application {
             customerQueue.getChildren().add(customerBlock);
         }
         ComputerHandler addComputer = getComputerHandler();
-        Computer computer = new Computer("123","321", "manufacturer", "Dell","Serial number" , 2023 );
-        Computer computer1 = new Computer("123","321", "manufacturer", "Dell","Serial number" , 2023 );
-        Computer computer2 = new Computer("123","321", "manufacturer", "Dell","Serial number" , 2023 );
+        Computer computer = new Computer("123","1234568", "manufacturer", "Dell","Serial number" , 2023 );
+        Computer computer1 = new Computer("456","1234568", "manufacturer", "Dell","Serial number" , 2023 );
+        Computer computer2 = new Computer("789","1234568", "manufacturer", "Dell","Serial number" , 2023 );
+
+
+        Computer computer3 = new Computer("12345","1235678", "manufacturer", "HP","Serial number" , 2023 );
+        Computer computer4 = new Computer("67890","1235678", "manufacturer", "HP","Serial number" , 2023 );
+        Computer computer5 = new Computer("111213","1235678", "manufacturer", "HP","Serial number" , 2023 );
+
+
+        Computer computer6 = new Computer("212223","1234567", "manufacturer", "APPLE","Serial number" , 2023 );
+        Computer computer7 = new Computer("232526","1234567", "manufacturer", "LENOVO","Serial number" , 2023 );
+        Computer computer8 = new Computer("272829","1234567", "manufacturer", "SAMSUNG","Serial number" , 2023 );
 
         addComputer.saveComputer(computer);
         addComputer.saveComputer(computer1);
         addComputer.saveComputer(computer2);
+        addComputer.saveComputer(computer3);
+        addComputer.saveComputer(computer4);
+        addComputer.saveComputer(computer5);
+        addComputer.saveComputer(computer6);
+        addComputer.saveComputer(computer7);
+        addComputer.saveComputer(computer8);
+
+        customer1 = getCustomerHandler().getCustomerByID(customer1.getCustomerID());
+        customer2 = getCustomerHandler().getCustomerByID(customer2.getCustomerID());
+        customer3 = getCustomerHandler().getCustomerByID(customer3.getCustomerID());
+
 
         // Create empty lists for computers and repair tickets
         ArrayList<Computer> computers = new ArrayList<>();
         computers.add(0, computer);
-        computers.add(1, computer1);
-        computers.add(2, computer2);
+        computers.add(1, computer4);
+        computers.add(2, computer7);
 
         customer1.setComputers(computers);
 

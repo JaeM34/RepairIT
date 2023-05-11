@@ -136,19 +136,50 @@ public class ComputerSQLDatabase {
         return null;
     }
 
+    private boolean computerExist(Computer computer) {
+        boolean b = false;
+        try {
+            PreparedStatement ps = c.prepareStatement("SELECT * FROM Computer WHERE ID =?");
+            ps.setString(1, computer.getComputerID());
+            ResultSet rs = ps.executeQuery();
+            b = rs.next();
+            ps.close();
+        } catch (SQLException e) {}
+        return b;
+    }
+
+
     public void saveComputer(Computer computer) {
         try {
-            PreparedStatement ps = c.prepareStatement("UPDATE Computer SET " +
-                    " MANUFACTURER = ?," +
-                    " MODEL = ?," +
-                    " SERIAL = ?," +
-                    " YEAR = ?," +
-                    " CUSTOMER = ?");
-            ps.setString(1, computer.getManufacturer());
-            ps.setString(2, computer.getModel());
-            ps.setInt(3, computer.getYear());
-            ps.setString(4, computer.getComputerID());
-            ps.executeUpdate();
+            if(computerExist(computer)) {
+                PreparedStatement ps = c.prepareStatement("UPDATE Computer SET " +
+                        " ID = ?, " +
+                        " MANUFACTURER = ?," +
+                        " MODEL = ?," +
+                        " SERIAL = ?," +
+                        " YEAR = ?," +
+                        " CUSTOMER = ?");
+                ps.setString(1, computer.getComputerID());
+                ps.setString(2, computer.getManufacturer());
+                ps.setString(3, computer.getModel());
+                ps.setString(4, computer.getSerialNumber());
+                ps.setInt(5, computer.getYear());
+                ps.setString(6, computer.getCustomerID());
+                ps.executeUpdate();
+                ps.close();
+            } else {
+                PreparedStatement ps = c.prepareStatement("INSERT INTO Computer (ID, MANUFACTURER, MODEL, SERIAL, YEAR, CUSTOMER) VALUES(?,?,?,?,?,?)");
+                ps.setString(1, computer.getComputerID());
+                ps.setString(2, computer.getManufacturer());
+                ps.setString(3, computer.getModel());
+                ps.setString(4, computer.getSerialNumber());
+                ps.setInt(5, computer.getYear());
+                ps.setString(6, computer.getCustomerID());
+                ps.executeUpdate();
+                ps.close();
+            }
+
+
 
             /*
             ArrayList<RepairTicket> tickets = RepairIT.getRepairticketHandler().getRepairTicketOnComputer(computer.getComputerID());
@@ -160,7 +191,6 @@ public class ComputerSQLDatabase {
                 ps.executeUpdate();
             }
              */
-            ps.close();
         } catch (SQLException e) {
             System.err.println("Error while saving computer " + computer.getComputerID());
             System.err.println((e.getClass().getName() + ": " + e.getMessage()));

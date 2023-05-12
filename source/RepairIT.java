@@ -460,28 +460,146 @@ public class RepairIT extends Application {
         Text searchText = new Text("Search - Customer");
         searchText.setFont(textFont);
 
+        //fields to enter info to search for customer with
+        TextField searchField1 = new TextField();
+        TextField searchField2 = new TextField();
+
+        // Text for center pane
+        Font subtextFont = Font.font("Arial", FontWeight.NORMAL, 12);
+
+        // Create a VBox for the customer queue
+        VBox customerQueue = new VBox();
+        customerQueue.setSpacing(10); // Set spacing between customer blocks
+        // Create a VBox for the repair queue
+        VBox repairQueue = new VBox();
+        repairQueue.setSpacing(10); // Set spacing between repair blocks
+        // Create a VBox for the search queue
+        VBox searchQueue = new VBox();
+        searchQueue.setSpacing(10); // Set spacing between repair blocks
+
+        ScrollPane searchScrollPane = new ScrollPane(searchQueue);
+
+        // Search buttons made for each operation possible
+        Button cuSearchButton = new Button("Search");
+        cuSearchButton.setFont(subtextFont);
+        cuSearchButton.setOnAction(actionEvent -> {
+            String name = searchField1.getText();
+            String address = searchField2.getText();
+
+            Customer customer = customerHandler.getCustomerByNameAndAddress(name, address);
+            if (customer != null) {
+                Label resultLabel = new Label("Customer Found:\nName: " + customer.getName() + "\nPhone: " + customer.getPhone() + "\nAddress: " + customer.getAddress() + "\nEmail: " + customer.getEmail());
+                searchQueue.getChildren().add(resultLabel);
+            } else {
+                Label resultLabel = new Label("Customer Not Found");
+                searchQueue.getChildren().add(resultLabel);
+            }
+            // Clear fields
+            searchField1.clear();
+            searchField2.clear();
+        });
+
+        Button coSearchButton = new Button("Search");
+        coSearchButton.setFont(subtextFont);
+        coSearchButton.setOnAction(actionEvent -> {
+            String manufacturer = searchField1.getText();
+            String serial = searchField2.getText();
+
+            Computer computer = computerHandler.getComputerBySerialNumber(serial);
+            if (computer != null) {
+                Label resultLabel = new Label("Computer found");
+                searchQueue.getChildren().add(resultLabel);
+            } else {
+                Label resultLabel = new Label("Computer not found");
+                searchQueue.getChildren().add(resultLabel);
+            }
+            // Clear fields
+            searchField1.clear();
+            searchField2.clear();
+        });
+
+        Button rSearchButton = new Button("Search");
+        rSearchButton.setFont(subtextFont);
+        rSearchButton.setOnAction(actionEvent -> {
+            String ticketID = searchField1.getText();
+
+            RepairTicket repairTicket = repairticketHandler.getRepairTicket(ticketID);
+            if (repairTicket != null) {
+                Label resultLabel = new Label("Ticket found");
+                searchQueue.getChildren().add(resultLabel);
+            } else {
+                Label resultLabel = new Label("Ticket not found");
+                searchQueue.getChildren().add(resultLabel);
+            }
+            // Clear fields
+            searchField1.clear();
+        });
+
+        GridPane grid = new GridPane();
+        // Add the text fields to the grid
+        grid.add(new Label("Name:"), 0, 1);
+        grid.add(searchField1, 1, 1);
+        // grid.add(new Label("Address:"), 0, 2);
+        grid.add(new Label("Phone Number:"), 0, 2);
+        grid.add(searchField2, 1, 2);
+
+
         // Search Customer button made
         Button customerSearchButton = new Button("Search Customer");
         Font font = Font.font("Arial", FontWeight.BOLD, 16);
         customerSearchButton.setFont(font);
         customerSearchButton.setOnAction(actionEvent -> {
-            System.out.println("already on Customer");
+            //clear scrollPane and set to settings for said button
+            searchQueue.getChildren().clear();
+            searchText.setText("Search - Customer");
+
+            // Add the text fields to the grid
+            GridPane newGrid = new GridPane();
+            newGrid.add(new Label("Name:"), 0, 1);
+            newGrid.add(searchField1, 1, 1);
+            // grid.add(new Label("Address:"), 0, 2);
+            newGrid.add(new Label("Phone Number:"), 0, 2);
+            newGrid.add(searchField2, 1, 2);
+
+            // new center pane elements added
+            searchQueue.getChildren().addAll(newGrid, cuSearchButton);
         });
 
         // Search Computer button made
         Button computerSearchButton = new Button("Search Computer");
         computerSearchButton.setFont(font);
         computerSearchButton.setOnAction(actionEvent -> {
-            Stage primaryStage = (Stage) computerSearchButton.getScene().getWindow();
-            primaryStage.setScene(searchComputerPage());
+            //Stage primaryStage = (Stage) computerSearchButton.getScene().getWindow();
+            //primaryStage.setScene(searchComputerPage());
+            searchQueue.getChildren().clear();
+            searchText.setText("Search - Computer");
+            // Add the text fields to the grid
+            GridPane newGrid = new GridPane();
+            newGrid.add(new Label("Manufacturer:"), 0, 1);
+            newGrid.add(searchField1, 1, 1);
+            newGrid.add(new Label("Serial Number:"), 0, 2);
+            newGrid.add(searchField2, 1, 2);
+
+            // new center pane elements added
+            searchQueue.getChildren().addAll(newGrid, coSearchButton);
+
         });
 
         // Search RepairTicket button made
         Button repairSearchButton = new Button("Search RepairTicket");
         repairSearchButton.setFont(font);
         repairSearchButton.setOnAction(actionEvent -> {
-            Stage primaryStage = (Stage) repairSearchButton.getScene().getWindow();
-            primaryStage.setScene(searchRepairTicket());
+            //Stage primaryStage = (Stage) repairSearchButton.getScene().getWindow();
+            //primaryStage.setScene(searchRepairTicket());
+            searchQueue.getChildren().clear();
+            searchText.setText("Search - Repair Ticket");
+            GridPane newGrid = new GridPane();
+            // Add the text fields to the grid
+            newGrid.add(new Label("Repair Ticket ID:"), 0, 1);
+            newGrid.add(searchField1, 1, 1);
+
+            // new center pane elements added
+            searchQueue.getChildren().addAll(newGrid, rSearchButton);
         });
 
         // sets coordinates for customer Queue text
@@ -510,16 +628,6 @@ public class RepairIT extends Application {
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
 
-        // Create a VBox for the customer queue
-        VBox customerQueue = new VBox();
-        customerQueue.setSpacing(10); // Set spacing between customer blocks
-        // Create a VBox for the repair queue
-        VBox repairQueue = new VBox();
-        repairQueue.setSpacing(10); // Set spacing between repair blocks
-        // Create a VBox for the search queue
-        VBox searchQueue = new VBox();
-        searchQueue.setSpacing(10); // Set spacing between repair blocks
-
         // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
         ScrollPane customerScrollPane = new ScrollPane(customerQueue);
         customerScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
@@ -538,55 +646,20 @@ public class RepairIT extends Application {
         AnchorPane.setRightAnchor(repairScrollPane, 10.0); // Set right anchor for repairScrollPane
 
         // Create a ScrollPane to hold the search queue at the center of the BorderPane
-        ScrollPane searchScrollPane = new ScrollPane(searchQueue);
         searchScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
         searchScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
         // Formats the Search Queue
         AnchorPane.setTopAnchor(searchScrollPane, 100.0); // Set top anchor for repairScrollPane
         AnchorPane.setRightAnchor(searchScrollPane, 340.0); // Set right anchor for repairScrollPane
 
-        // Text for center pane
-        Font subtextFont = Font.font("Arial", FontWeight.NORMAL, 12);
         //  Text phoneNumber = new Text("Phone Number");
         // phoneNumber.setFont(subtextFont);
         Text nameAndAddress = new Text("Name and Address");
         nameAndAddress.setFont(subtextFont);
 
-        //fields to enter info to search for customer with
-        TextField searchField1 = new TextField();
-        TextField searchField2 = new TextField();
-
-        // Search button made
-        Button searchButton = new Button("Search");
-        searchButton.setFont(subtextFont);
-        searchButton.setOnAction(actionEvent -> {
-            String name = searchField1.getText();
-            String address = searchField2.getText();
-
-            Customer customer = customerHandler.getCustomerByNameAndAddress(name, address);
-            if (customer != null) {
-                Label resultLabel = new Label("Customer Found:\nName: " + customer.getName() + "\nPhone: " + customer.getPhone() + "\nAddress: " + customer.getAddress() + "\nEmail: " + customer.getEmail());
-                searchQueue.getChildren().add(resultLabel);
-            } else {
-                Label resultLabel = new Label("Customer Not Found");
-                searchQueue.getChildren().add(resultLabel);
-            }
-            // Clear fields
-            searchField1.clear();
-            searchField2.clear();
-        });
-
-        GridPane grid = new GridPane();
-        // Add the text fields to the grid
-        grid.add(new Label("Name:"), 0, 1);
-        grid.add(searchField1, 1, 1);
-       // grid.add(new Label("Address:"), 0, 2);
-        grid.add(new Label("Phone Number:"), 0, 2);
-        grid.add(searchField2, 1, 2);
-
         // Set up for center pane
         searchQueue.setAlignment(Pos.TOP_LEFT);
-        searchQueue.getChildren().addAll(grid, searchButton);
+        searchQueue.getChildren().addAll(grid, cuSearchButton);
 
         // Adds UI elements to scene
         anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton); // Add all the elements to the root group// Add all the elements to the root group
@@ -1179,425 +1252,4 @@ public class RepairIT extends Application {
 
         return scene;
     }
-
-    private Scene searchComputerPage(){  // to do probably get rid of
-        // Create a new pane for the customer scene
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(10));
-        Scene scene = new Scene(root, 1000, 600);
-        // Create a StackPane for the rectangle and button
-        StackPane stackPane = new StackPane();
-        // Create a AnchorPane for UI component placement
-        AnchorPane anchorPane = new AnchorPane();
-
-        // Create a rectangle
-        Rectangle rectangle = new Rectangle();
-        rectangle.setFill(Color.WHITE);
-        rectangle.setStroke(Color.BLACK); // Set border color
-        rectangle.setStrokeWidth(2); // Set border width
-
-        // Width and height of rectangle relative size to the window
-        rectangle.widthProperty().bind(root.widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
-        rectangle.heightProperty().bind(root.heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
-        // Adds rectangle as the base layer
-        stackPane.getChildren().add(rectangle);
-
-        // Create nodes for the 3 queues
-        Text customerText = new Text("Customer Queue");
-        Font textFont = Font.font("Arial", FontWeight.BOLD, 20); // Replace with desired font, weight, and size
-        customerText.setFont(textFont);
-
-        Text repairText = new Text("Repair Queue");
-        repairText.setFont(textFont);
-
-        Text searchText = new Text("Search - Computer");
-        searchText.setFont(textFont);
-
-        // Search Customer button made
-        Button customerSearchButton = new Button("Search Customer");
-        Font font = Font.font("Arial", FontWeight.BOLD, 16);
-        customerSearchButton.setFont(font);
-        customerSearchButton.setOnAction(actionEvent -> {
-            Stage primaryStage = (Stage) customerSearchButton.getScene().getWindow();
-            primaryStage.setScene(createMainScene());
-        });
-
-        // Search Computer button made
-        Button computerSearchButton = new Button("Search Computer");
-        computerSearchButton.setFont(font);
-        computerSearchButton.setOnAction(actionEvent -> {
-            System.out.println("Already on computer");
-        });
-
-        // Search RepairTicket button made
-        Button repairSearchButton = new Button("Search RepairTicket");
-        repairSearchButton.setFont(font);
-        repairSearchButton.setOnAction(actionEvent -> {
-            Stage primaryStage = (Stage) repairSearchButton.getScene().getWindow();
-            primaryStage.setScene(searchRepairTicket());
-        });
-
-        // sets coordinates for customer Queue text
-        AnchorPane.setTopAnchor(customerText, 75.0); // Set top anchor for CUSTOMER Queue Text
-        AnchorPane.setLeftAnchor(customerText, 70.0); // Set right anchor for Button 2
-        // sets coordinates for Repair Queue Text
-        AnchorPane.setTopAnchor(repairText, 75.0); // Set top anchor for CUSTOMER Queue Text
-        AnchorPane.setRightAnchor(repairText, 85.0); // Set right anchor for Button 2
-        // sets coordinates for Search - Customer
-        AnchorPane.setTopAnchor(searchText, 75.0); // Set top anchor for CUSTOMER Queue Text
-        AnchorPane.setRightAnchor(searchText, 400.0); // Set right anchor for Button 2
-
-        StackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
-        // Bind the size of the button to the size of the rectangle
-        customerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        customerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-        StackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
-        // Bind the size of the button to the size of the rectangle
-        computerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        computerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-        StackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
-        // Bind the size of the button to the size of the rectangle
-        repairSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        repairSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-
-        // Add the stack pane to the root BorderPane
-        root.setCenter(stackPane);
-
-        // Create a VBox for the customer queue
-        VBox customerQueue = new VBox();
-        customerQueue.setSpacing(10); // Set spacing between customer blocks
-        // Create a VBox for the repair queue
-        VBox repairQueue = new VBox();
-        repairQueue.setSpacing(10); // Set spacing between repair blocks
-        // Create a VBox for the search queue
-        VBox searchQueue = new VBox();
-        searchQueue.setSpacing(10); // Set spacing between repair blocks
-
-        // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
-        ScrollPane customerScrollPane = new ScrollPane(customerQueue);
-        customerScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
-        customerScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
-        //customerScrollPane.setPrefSize(300, 400);
-        // sets coordinates for the customerScrollPane
-        AnchorPane.setTopAnchor(customerScrollPane, 100.0); // Set top anchor for customerScrollPane
-        AnchorPane.setLeftAnchor(customerScrollPane, 10.0); // Set left anchor for customerScrollPane
-
-        // Create a ScrollPane to hold the repair queue and set it as right of the root BorderPane
-        ScrollPane repairScrollPane = new ScrollPane(repairQueue);
-        repairScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
-        repairScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
-        // Formats the Repair Queue
-        AnchorPane.setTopAnchor(repairScrollPane, 100.0); // Set top anchor for repairScrollPane
-        AnchorPane.setRightAnchor(repairScrollPane, 10.0); // Set right anchor for repairScrollPane
-
-        // Create a ScrollPane to hold the search queue at the center of the BorderPane
-        ScrollPane searchScrollPane = new ScrollPane(searchQueue);
-        searchScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
-        searchScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
-        // Formats the Search Queue
-        AnchorPane.setTopAnchor(searchScrollPane, 100.0); // Set top anchor for repairScrollPane
-        AnchorPane.setRightAnchor(searchScrollPane, 340.0); // Set right anchor for repairScrollPane
-
-        // Text for center pane
-        Font subtextFont = Font.font("Arial", FontWeight.NORMAL, 12);
-        //  Text phoneNumber = new Text("Phone Number");
-        // phoneNumber.setFont(subtextFont);
-        Text nameAndAddress = new Text("Name and Address");
-        nameAndAddress.setFont(subtextFont);
-
-        //fields to enter info to search for customer with
-        TextField searchField1 = new TextField();
-        TextField searchField2 = new TextField();
-
-        // Search button made
-        Button searchButton = new Button("Search");
-        searchButton.setFont(subtextFont);
-        searchButton.setOnAction(actionEvent -> {
-            String manufacturer = searchField1.getText();
-            String serial = searchField2.getText();
-
-            Computer computer = computerHandler.getComputerBySerialNumber(serial);
-            if (computer != null) {
-                Label resultLabel = new Label("Computer found");
-                searchQueue.getChildren().add(resultLabel);
-            } else {
-                Label resultLabel = new Label("Computer not found");
-                searchQueue.getChildren().add(resultLabel);
-            }
-            // Clear fields
-            searchField1.clear();
-            searchField2.clear();
-        });
-
-        GridPane grid = new GridPane();
-        // Add the text fields to the grid
-        grid.add(new Label("Manufacturer:"), 0, 1);
-        grid.add(searchField1, 1, 1);
-        grid.add(new Label("Serial Number:"), 0, 2);
-        grid.add(searchField2, 1, 2);
-        // Set up for center pane
-        searchQueue.setAlignment(Pos.TOP_LEFT);
-        searchQueue.getChildren().addAll(grid, searchButton);
-
-        // Adds UI elements to scene
-        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton);
-        // Places UI elements on top of the rectangle
-        stackPane.getChildren().addAll(anchorPane, repairSearchButton, computerSearchButton, customerSearchButton);
-        stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392));
-        // Create sample data for the customer queue (replace with your actual data)
-        List<Customer> customerList = new ArrayList<>();
-
-        // Create sample data for the customer queue (replace with your actual data)
-
-        Customer customer1 = new Customer("John", "Here", "12345678",
-                "(323)555-1234", "my@mail.com", null, null);
-        Customer customer2 = new Customer("John Smith", "Somewhere", "12345678",
-                "(323)555-1234", "my@mail.com", null, null);
-        Customer customer3 = new Customer("Joe", "Mama", "12345678",
-                "(323)555-1234", "my@mail.com", null, null);
-
-
-        CustomerHandler addCustomer = getCustomerHandler();
-        addCustomer.saveCustomer(customer1);
-        addCustomer.saveCustomer(customer2);
-        addCustomer.saveCustomer(customer3);
-
-        customerList.add(customer1);
-        customerList.add(customer2);
-        customerList.add(customer3);
-
-        // Add customer blocks to the customer queue
-        for (Customer customer : customerList) {
-            VBox customerBlock = createCustomerBlock(customer);
-            customerQueue.getChildren().add(customerBlock);
-        }
-
-        // Create empty lists for computers and repair tickets
-        ArrayList<Computer> computers = new ArrayList<>();
-        ArrayList<RepairTicket> repairTickets = new ArrayList<>();
-
-        // Create sample data for the repair queue (replace with your actual data)
-        List<Computer> repairList = new ArrayList<>();
-       // repairList.add(new Computer("John", 1));
-       // repairList.add(new Computer("John", 2));
-       // repairList.add(new Computer("John", 3));
-       // repairList.add(new Computer("John", 4));
-
-
-        /// Add repair blocks to the repair queue
-        for (Computer computer : repairList) {
-            VBox customerBlock = createRepairBlock(computer);
-            repairQueue.getChildren().add(customerBlock);
-        }
-        return scene;
-    }
-
-    private Scene searchRepairTicket() {  // To do probably get rid of
-        // Create a new pane for the customer scene
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(10));
-        Scene scene = new Scene(root, 1000, 600);
-        // Create a StackPane for the rectangle and button
-        StackPane stackPane = new StackPane();
-        // Create a AnchorPane for UI component placement
-        AnchorPane anchorPane = new AnchorPane();
-
-        // Create a rectangle
-        Rectangle rectangle = new Rectangle();
-        rectangle.setFill(Color.WHITE);
-        rectangle.setStroke(Color.BLACK); // Set border color
-        rectangle.setStrokeWidth(2); // Set border width
-
-        // Width and height of rectangle relative size to the window
-        rectangle.widthProperty().bind(root.widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
-        rectangle.heightProperty().bind(root.heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
-        // Adds rectangle as the base layer
-        stackPane.getChildren().add(rectangle);
-
-        // Create nodes for the 3 queues
-        Text customerText = new Text("Customer Queue");
-        Font textFont = Font.font("Arial", FontWeight.BOLD, 20); // Replace with desired font, weight, and size
-        customerText.setFont(textFont);
-
-        Text repairText = new Text("Repair Queue");
-        repairText.setFont(textFont);
-
-        Text searchText = new Text("Search - Repair Ticket");
-        searchText.setFont(textFont);
-
-        // Search Customer button made
-        Button customerSearchButton = new Button("Search Customer");
-        Font font = Font.font("Arial", FontWeight.BOLD, 16);
-        customerSearchButton.setFont(font);
-        customerSearchButton.setOnAction(actionEvent -> {
-            Stage primaryStage = (Stage) customerSearchButton.getScene().getWindow();
-            primaryStage.setScene(createMainScene());
-        });
-
-        // Search Computer button made
-        Button computerSearchButton = new Button("Search Computer");
-        computerSearchButton.setFont(font);
-        computerSearchButton.setOnAction(actionEvent -> {
-            Stage primaryStage = (Stage) computerSearchButton.getScene().getWindow();
-            primaryStage.setScene(searchComputerPage());
-        });
-
-        // Search RepairTicket button made
-        Button repairSearchButton = new Button("Search RepairTicket");
-        repairSearchButton.setFont(font);
-        repairSearchButton.setOnAction(actionEvent -> {
-            System.out.println("Already on repair");
-        });
-
-        // sets coordinates for customer Queue text
-        AnchorPane.setTopAnchor(customerText, 75.0); // Set top anchor for CUSTOMER Queue Text
-        AnchorPane.setLeftAnchor(customerText, 70.0); // Set right anchor for Button 2
-        // sets coordinates for Repair Queue Text
-        AnchorPane.setTopAnchor(repairText, 75.0); // Set top anchor for CUSTOMER Queue Text
-        AnchorPane.setRightAnchor(repairText, 85.0); // Set right anchor for Button 2
-        // sets coordinates for Search - Customer
-        AnchorPane.setTopAnchor(searchText, 75.0); // Set top anchor for CUSTOMER Queue Text
-        AnchorPane.setRightAnchor(searchText, 400.0); // Set right anchor for Button 2
-
-        StackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
-        // Bind the size of the button to the size of the rectangle
-        customerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        customerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-        StackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
-        // Bind the size of the button to the size of the rectangle
-        computerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        computerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-        StackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
-        // Bind the size of the button to the size of the rectangle
-        repairSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        repairSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-
-        // Add the stack pane to the root BorderPane
-        root.setCenter(stackPane);
-
-        // Create a VBox for the customer queue
-        VBox customerQueue = new VBox();
-        customerQueue.setSpacing(10); // Set spacing between customer blocks
-        // Create a VBox for the repair queue
-        VBox repairQueue = new VBox();
-        repairQueue.setSpacing(10); // Set spacing between repair blocks
-        // Create a VBox for the search queue
-        VBox searchQueue = new VBox();
-        searchQueue.setSpacing(10); // Set spacing between repair blocks
-
-        // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
-        ScrollPane customerScrollPane = new ScrollPane(customerQueue);
-        customerScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
-        customerScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
-        //customerScrollPane.setPrefSize(300, 400);
-        // sets coordinates for the customerScrollPane
-        AnchorPane.setTopAnchor(customerScrollPane, 100.0); // Set top anchor for customerScrollPane
-        AnchorPane.setLeftAnchor(customerScrollPane, 10.0); // Set left anchor for customerScrollPane
-
-        // Create a ScrollPane to hold the repair queue and set it as right of the root BorderPane
-        ScrollPane repairScrollPane = new ScrollPane(repairQueue);
-        repairScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
-        repairScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
-        // Formats the Repair Queue
-        AnchorPane.setTopAnchor(repairScrollPane, 100.0); // Set top anchor for repairScrollPane
-        AnchorPane.setRightAnchor(repairScrollPane, 10.0); // Set right anchor for repairScrollPane
-
-        // Create a ScrollPane to hold the search queue at the center of the BorderPane
-        ScrollPane searchScrollPane = new ScrollPane(searchQueue);
-        searchScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
-        searchScrollPane.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.65));
-        // Formats the Search Queue
-        AnchorPane.setTopAnchor(searchScrollPane, 100.0); // Set top anchor for repairScrollPane
-        AnchorPane.setRightAnchor(searchScrollPane, 340.0); // Set right anchor for repairScrollPane
-
-        // Text for center pane
-        Font subtextFont = Font.font("Arial", FontWeight.NORMAL, 12);
-        //  Text phoneNumber = new Text("Phone Number");
-        // phoneNumber.setFont(subtextFont);
-        Text nameAndAddress = new Text("Name and Address");
-        nameAndAddress.setFont(subtextFont);
-
-        //fields to enter info to search for customer with
-        TextField searchField1 = new TextField();
-
-        // Search button made
-        Button searchButton = new Button("Search");
-        searchButton.setFont(subtextFont);
-        searchButton.setOnAction(actionEvent -> {
-            String ticketID = searchField1.getText();
-
-            RepairTicket repairTicket = repairticketHandler.getRepairTicket(ticketID);
-            if (repairTicket != null) {
-                Label resultLabel = new Label("Computer found");
-                searchQueue.getChildren().add(resultLabel);
-            } else {
-                Label resultLabel = new Label("Computer not found");
-                searchQueue.getChildren().add(resultLabel);
-            }
-            // Clear fields
-            searchField1.clear();
-        });
-
-        GridPane grid = new GridPane();
-        // Add the text fields to the grid
-        grid.add(new Label("Repair Ticket ID:"), 0, 1);
-        grid.add(searchField1, 1, 1);
-        // Set up for center pane
-        searchQueue.setAlignment(Pos.TOP_LEFT);
-        searchQueue.getChildren().addAll(grid, searchButton);
-
-        // Adds UI elements to scene
-        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton);
-        // Places UI elements on top of the rectangle
-        stackPane.getChildren().addAll(anchorPane, repairSearchButton, computerSearchButton, customerSearchButton);
-        stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392));
-        // Create sample data for the customer queue (replace with your actual data)
-        List<Customer> customerList = new ArrayList<>();
-
-        // Create sample data for the customer queue (replace with your actual data)
-
-        Customer customer1 = new Customer("John", "Here", "12345678",
-                "(323)555-1234", "my@mail.com", null, null);
-        Customer customer2 = new Customer("John Smith", "Somewhere", "12345678",
-                "(323)555-1234", "my@mail.com", null, null);
-        Customer customer3 = new Customer("Joe", "Mama", "12345678",
-                "(323)555-1234", "my@mail.com", null, null);
-
-
-        CustomerHandler addCustomer = getCustomerHandler();
-        addCustomer.saveCustomer(customer1);
-        addCustomer.saveCustomer(customer2);
-        addCustomer.saveCustomer(customer3);
-
-        customerList.add(customer1);
-        customerList.add(customer2);
-        customerList.add(customer3);
-
-        // Add customer blocks to the customer queue
-        for (Customer customer : customerList) {
-            VBox customerBlock = createCustomerBlock(customer);
-            customerQueue.getChildren().add(customerBlock);
-        }
-
-        // Create empty lists for computers and repair tickets
-        ArrayList<Computer> computers = new ArrayList<>();
-        ArrayList<RepairTicket> repairTickets = new ArrayList<>();
-
-        // Create sample data for the repair queue (replace with your actual data)
-        List<Computer> repairList = new ArrayList<>();
-       // repairList.add(new Computer("John", 1));
-       // repairList.add(new Computer("John", 2));
-       // repairList.add(new Computer("John", 3));
-       // repairList.add(new Computer("John", 4));
-
-        /// Add repair blocks to the repair queue
-        for (Computer computer : repairList) {
-            VBox customerBlock = createRepairBlock(computer);
-            repairQueue.getChildren().add(customerBlock);
-        }
-
-        return scene;
-
-    }
-
 }

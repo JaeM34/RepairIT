@@ -466,10 +466,9 @@ public class RepairIT extends Application {
         // Create a VBox for the search queue
         VBox searchQueue = new VBox();
         searchQueue.setSpacing(10); // Set spacing between repair blocks
-
         ScrollPane searchScrollPane = new ScrollPane(searchQueue);
 
-        // Search buttons made for each operation possible
+       // Search buttons made for each operation possible
         Button cuSearchButton = new Button("Search");
         cuSearchButton.setFont(subtextFont);
         cuSearchButton.setOnAction(actionEvent -> {
@@ -477,12 +476,66 @@ public class RepairIT extends Application {
             String address = searchField2.getText();
 
             Customer customer = customerHandler.getCustomerByNameAndAddress(name, address);
-            if (customer != null) {
+            if (customer.getName() != null && !name.isEmpty() && !address.isEmpty()) {
                 Label resultLabel = new Label("Customer Found:\nName: " + customer.getName() + "\nPhone: " + customer.getPhone() + "\nAddress: " + customer.getAddress() + "\nEmail: " + customer.getEmail());
                 searchQueue.getChildren().add(resultLabel);
             } else {
-                Label resultLabel = new Label("Customer Not Found");
-                searchQueue.getChildren().add(resultLabel);
+                // Create the pop-up window
+                Stage popupStage = new Stage();
+                popupStage.initModality(Modality.APPLICATION_MODAL);
+                popupStage.setTitle("Add Customer");
+
+                // Create text fields for input
+                TextField nameField = new TextField();
+                TextField addressField = new TextField();
+                TextField customerIDField = new TextField();
+                TextField phoneField = new TextField();
+                TextField emailField = new TextField();
+
+                // Create a button to save the customer
+                Button saveButton = new Button("Save");
+                saveButton.setOnAction(saveEvent -> {
+
+                    CustomerHandler addCustomers = new CustomerHandler();
+
+                    // Retrieve the input values
+                    String namefield = nameField.getText();
+                    String address1 = addressField.getText();
+                    String customerID = customerIDField.getText();
+                    String phone = phoneField.getText();
+                    String email = emailField.getText();
+
+                    // Create the customer
+                    // ArrayList<Computer> computers = null; // Set to null for now
+                    // ArrayList<RepairTicket> repairTickets = null; // Set to null for now
+                    Customer customer1 = new Customer(namefield, address1, customerID, phone, email, null, null);
+                    addCustomers.saveCustomer(customer1);
+                    // Close the pop-up window
+                    popupStage.close();
+                });
+                // Create a layout for the pop-up window
+                VBox layout = new VBox(10);
+                layout.getChildren().addAll(
+                        new Label("Name:"),
+                        nameField,
+                        new Label("Address:"),
+                        addressField,
+                        new Label("Customer ID:"),
+                        customerIDField,
+                        new Label("Phone:"),
+                        phoneField,
+                        new Label("Email:"),
+                        emailField,
+                        saveButton
+                );
+                layout.setAlignment(Pos.CENTER);
+                // Set the layout for the pop-up window
+                Scene popupScene = new Scene(layout, 700, 400);
+                popupStage.setScene(popupScene);
+                popupStage.showAndWait();
+
+                //Label resultLabel = new Label("Customer Not Found");
+               // searchQueue.getChildren().add(resultLabel);
             }
             // Clear fields
             searchField1.clear();
@@ -492,11 +545,10 @@ public class RepairIT extends Application {
         Button coSearchButton = new Button("Search");
         coSearchButton.setFont(subtextFont);
         coSearchButton.setOnAction(actionEvent -> {
-            String manufacturer = searchField1.getText();
             String serial = searchField2.getText();
 
             Computer computer = computerHandler.getComputerBySerialNumber(serial);
-            if (computer != null) {
+            if (computer.getSerialNumber() != null && !serial.isEmpty()) {
                 Label resultLabel = new Label("Computer found");
                 searchQueue.getChildren().add(resultLabel);
             } else {
@@ -514,7 +566,7 @@ public class RepairIT extends Application {
             String ticketID = searchField1.getText();
 
             RepairTicket repairTicket = repairticketHandler.getRepairTicket(ticketID);
-            if (repairTicket != null) {
+            if (repairTicket.getId() != null && !ticketID.isEmpty()) {
                 Label resultLabel = new Label("Ticket found");
                 searchQueue.getChildren().add(resultLabel);
             } else {
@@ -530,10 +582,8 @@ public class RepairIT extends Application {
         grid.add(new Label("Name:"), 0, 1);
         grid.add(searchField1, 1, 1);
         // grid.add(new Label("Address:"), 0, 2);
-        grid.add(new Label("Phone Number:"), 0, 2);
+        grid.add(new Label("Address:"), 0, 2);
         grid.add(searchField2, 1, 2);
-
-
 
 
         // Search Customer button made
@@ -550,7 +600,7 @@ public class RepairIT extends Application {
             newGrid.add(new Label("Name:"), 0, 1);
             newGrid.add(searchField1, 1, 1);
             // grid.add(new Label("Address:"), 0, 2);
-            newGrid.add(new Label("Phone Number:"), 0, 2);
+            newGrid.add(new Label("Address:"), 0, 2);
             newGrid.add(searchField2, 1, 2);
 
             // new center pane elements added
@@ -565,8 +615,6 @@ public class RepairIT extends Application {
             searchText.setText("Search - Computer");
             // Add the text fields to the grid
             GridPane newGrid = new GridPane();
-            newGrid.add(new Label("Manufacturer:"), 0, 1);
-            newGrid.add(searchField1, 1, 1);
             newGrid.add(new Label("Serial Number:"), 0, 2);
             newGrid.add(searchField2, 1, 2);
 
@@ -614,7 +662,6 @@ public class RepairIT extends Application {
 
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
-
 
         // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
         ScrollPane customerScrollPane = new ScrollPane(customerQueue);
@@ -765,72 +812,11 @@ public class RepairIT extends Application {
             repairQueue.getChildren().add(customerBlock);
         }
 
-        // Create a button to add a customer
-        Button addCustomerButton = new Button("Add Customer");
-        addCustomerButton.setOnAction(event -> {
-
-            // Create the pop-up window
-            Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.setTitle("Add Customer");
-
-            // Create text fields for input
-            TextField nameField = new TextField();
-            TextField addressField = new TextField();
-            TextField customerIDField = new TextField();
-            TextField phoneField = new TextField();
-            TextField emailField = new TextField();
-
-            // Create a button to save the customer
-            Button saveButton = new Button("Save");
-            saveButton.setOnAction(saveEvent -> {
-
-                CustomerHandler addCustomers = new CustomerHandler();
-
-                // Retrieve the input values
-                String name = nameField.getText();
-                String address = addressField.getText();
-                String customerID = customerIDField.getText();
-                String phone = phoneField.getText();
-                String email = emailField.getText();
-
-                // Create the customer
-               // ArrayList<Computer> computers = null; // Set to null for now
-               // ArrayList<RepairTicket> repairTickets = null; // Set to null for now
-                Customer customer = new Customer(name, address, customerID, phone, email, null, null);
-                addCustomer.saveCustomer(customer);
-
-                // Close the pop-up window
-                popupStage.close();
-            });
-            // Create a layout for the pop-up window
-            VBox layout = new VBox(10);
-            layout.getChildren().addAll(
-                    new Label("Name:"),
-                    nameField,
-                    new Label("Address:"),
-                    addressField,
-                    new Label("Customer ID:"),
-                    customerIDField,
-                    new Label("Phone:"),
-                    phoneField,
-                    new Label("Email:"),
-                    emailField,
-                    saveButton
-            );
-            layout.setAlignment(Pos.CENTER);
-            // Set the layout for the pop-up window
-            Scene popupScene = new Scene(layout, 700, 400);
-            popupStage.setScene(popupScene);
-            popupStage.showAndWait();
-        });
-
         // Adds UI elements to scene
-        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton, addCustomerButton); // Add all the elements to the root group// Add all the elements to the root group
+        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton); // Add all the elements to the root group// Add all the elements to the root group
 
         // Places UI elements on top of the rectangle
-        stackPane.getChildren().addAll(anchorPane, repairSearchButton, computerSearchButton, customerSearchButton, addCustomerButton);
-
+        stackPane.getChildren().addAll(anchorPane, repairSearchButton, computerSearchButton, customerSearchButton);
 
 
         return scene;

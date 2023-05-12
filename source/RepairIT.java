@@ -7,24 +7,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.PopupWindow;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class RepairIT extends Application {
 
@@ -84,13 +76,13 @@ public class RepairIT extends Application {
     }
 
     // Helper method to create a repair block
-    private VBox createRepairBlock(Computer computer) {
+    private VBox createRepairBlock(Customer customer, Computer computer) {
         VBox repairBlock = new VBox();
         repairBlock.setSpacing(5); // Set spacing between UI components in repair block
 
         // Create labels to display repair ticket information
-        Label computerLabel = new Label("Computer: " + computer.getModel());
-        Label computerIDLabel = new Label("Year: " + computer.getYear());
+        Label computerLabel = new Label("Name: " +  customer.getName());
+        Label computerIDLabel = new Label("Ticket: " + customer.getRepairTickets());
 
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(event -> {
@@ -102,7 +94,7 @@ public class RepairIT extends Application {
         repairButton.setOnAction(event -> {
 
             Stage primaryStage = (Stage) repairButton.getScene().getWindow();
-            primaryStage.setScene(createRepairScene());
+            primaryStage.setScene(createRepairTicketOverviewPage());
         });
 
         // Add UI components to repair block
@@ -246,6 +238,7 @@ public class RepairIT extends Application {
           BorderPane root = new BorderPane();
           root.setPadding(new Insets(10));
           Scene scene = new Scene(root, 1000, 600);
+
           // Create a StackPane for the rectangle and button
           StackPane stackPane = new StackPane();
           // Create a AnchorPane for UI component placement
@@ -338,7 +331,6 @@ public class RepairIT extends Application {
           Label phoneLabel = new Label("Phone: " + customer.getPhone());
           Label emailLabel = new Label("Email: " + customer.getEmail());
 
-
           Font labelFont = Font.font("Arial", FontWeight.BOLD, 14); // Specify the font family, weight, and size
           nameLabel.setFont(labelFont);
           phoneLabel.setFont(labelFont);
@@ -363,7 +355,6 @@ public class RepairIT extends Application {
           AnchorPane.setLeftAnchor(computerInfoBox, 0.0);
           AnchorPane.setRightAnchor(computerInfoBox, 0.0);
           AnchorPane.setBottomAnchor(computerInfoBox, 0.0);
-
 
           // Display computer information
           ArrayList<Computer> computers = customer.getComputers();
@@ -390,9 +381,8 @@ public class RepairIT extends Application {
                   Button selectButton = new Button("Select");
                   selectButton.setOnAction(event -> {
                       // Handle the select button click event here
-
                       Stage primaryStage = (Stage) selectButton.getScene().getWindow();
-                      primaryStage.setScene((createComputerPage()));
+                      primaryStage.setScene((createComputerPage(customer, computer)));
 
                   });
                   // Add computer information labels to the computerBox
@@ -544,6 +534,8 @@ public class RepairIT extends Application {
         grid.add(searchField2, 1, 2);
 
 
+
+
         // Search Customer button made
         Button customerSearchButton = new Button("Search Customer");
         Font font = Font.font("Arial", FontWeight.BOLD, 16);
@@ -569,8 +561,6 @@ public class RepairIT extends Application {
         Button computerSearchButton = new Button("Search Computer");
         computerSearchButton.setFont(font);
         computerSearchButton.setOnAction(actionEvent -> {
-            //Stage primaryStage = (Stage) computerSearchButton.getScene().getWindow();
-            //primaryStage.setScene(searchComputerPage());
             searchQueue.getChildren().clear();
             searchText.setText("Search - Computer");
             // Add the text fields to the grid
@@ -582,15 +572,12 @@ public class RepairIT extends Application {
 
             // new center pane elements added
             searchQueue.getChildren().addAll(newGrid, coSearchButton);
-
         });
 
         // Search RepairTicket button made
         Button repairSearchButton = new Button("Search RepairTicket");
         repairSearchButton.setFont(font);
         repairSearchButton.setOnAction(actionEvent -> {
-            //Stage primaryStage = (Stage) repairSearchButton.getScene().getWindow();
-            //primaryStage.setScene(searchRepairTicket());
             searchQueue.getChildren().clear();
             searchText.setText("Search - Repair Ticket");
             GridPane newGrid = new GridPane();
@@ -628,6 +615,7 @@ public class RepairIT extends Application {
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
 
+
         // Create a ScrollPane to hold the customer queue and set it as left of the root BorderPane
         ScrollPane customerScrollPane = new ScrollPane(customerQueue);
         customerScrollPane.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.3));
@@ -659,13 +647,9 @@ public class RepairIT extends Application {
 
         // Set up for center pane
         searchQueue.setAlignment(Pos.TOP_LEFT);
+
         searchQueue.getChildren().addAll(grid, cuSearchButton);
 
-        // Adds UI elements to scene
-        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton); // Add all the elements to the root group// Add all the elements to the root group
-
-        // Places UI elements on top of the rectangle
-        stackPane.getChildren().addAll(anchorPane, repairSearchButton, computerSearchButton, customerSearchButton);
         stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392));
         // Create sample data for the customer queue (replace with your actual data)
         List<Customer> customerList = new ArrayList<>();
@@ -746,54 +730,117 @@ public class RepairIT extends Application {
           RepairTicket ticket6 = new RepairTicket("ID","CustomerID","ComputerID", "Issue", "Status");
 
           // not working currently
-
          // addRepairTicket.saveRepairTicket(ticket1);
          // addRepairTicket.saveRepairTicket(ticket2);
          // addRepairTicket.saveRepairTicket(ticket3);
 
         ArrayList<RepairTicket> repairTickets = new ArrayList<>();
 
-          repairTickets.add(0,ticket1);
-          repairTickets.add(1,ticket2);
-          repairTickets.add(2,ticket3);
+          repairTickets.add(0,ticket4);
+
 
         ArrayList<RepairTicket> repairTickets1 = new ArrayList<>();
 
-        repairTickets.add(0,ticket1);
-        repairTickets.add(1,ticket2);
-        repairTickets.add(2,ticket3);
+        repairTickets.add(0,ticket2);
 
         ArrayList<RepairTicket> repairTickets2 = new ArrayList<>();
 
-        repairTickets.add(0,ticket1);
-        repairTickets.add(1,ticket2);
-        repairTickets.add(2,ticket3);
+        repairTickets.add(0,ticket3);
 
         customer1.setRepairTickets(repairTickets);
         customer2.setRepairTickets(repairTickets1);
         customer3.setRepairTickets(repairTickets2);
 
           // Create sample data for the repair queue (replace with your actual data)
-        List<Computer> repairList = new ArrayList<>();
-        repairList.add(computer);
-        computers.add(1, computer4);
-        computers.add(2, computer7);
+        List<Customer> repairList = new ArrayList<>();
+        repairList.add(customer1);
+        repairList.add(customer2);
+        repairList.add(customer3);
+      //  computers.add(1, computer4);
+      //  computers.add(2, computer7);
 
         /// Add repair blocks to the repair queue
-        for (Computer Computer : repairList) {
-            VBox customerBlock = createRepairBlock(Computer);
+        for (Customer customer : repairList) {
+            VBox customerBlock = createRepairBlock(customer, computer);
             repairQueue.getChildren().add(customerBlock);
         }
 
+        // Create a button to add a customer
+        Button addCustomerButton = new Button("Add Customer");
+        addCustomerButton.setOnAction(event -> {
+
+            // Create the pop-up window
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setTitle("Add Customer");
+
+            // Create text fields for input
+            TextField nameField = new TextField();
+            TextField addressField = new TextField();
+            TextField customerIDField = new TextField();
+            TextField phoneField = new TextField();
+            TextField emailField = new TextField();
+
+            // Create a button to save the customer
+            Button saveButton = new Button("Save");
+            saveButton.setOnAction(saveEvent -> {
+
+                CustomerHandler addCustomers = new CustomerHandler();
+
+                // Retrieve the input values
+                String name = nameField.getText();
+                String address = addressField.getText();
+                String customerID = customerIDField.getText();
+                String phone = phoneField.getText();
+                String email = emailField.getText();
+
+                // Create the customer
+               // ArrayList<Computer> computers = null; // Set to null for now
+               // ArrayList<RepairTicket> repairTickets = null; // Set to null for now
+                Customer customer = new Customer(name, address, customerID, phone, email, null, null);
+                addCustomer.saveCustomer(customer);
+
+                // Close the pop-up window
+                popupStage.close();
+            });
+            // Create a layout for the pop-up window
+            VBox layout = new VBox(10);
+            layout.getChildren().addAll(
+                    new Label("Name:"),
+                    nameField,
+                    new Label("Address:"),
+                    addressField,
+                    new Label("Customer ID:"),
+                    customerIDField,
+                    new Label("Phone:"),
+                    phoneField,
+                    new Label("Email:"),
+                    emailField,
+                    saveButton
+            );
+            layout.setAlignment(Pos.CENTER);
+            // Set the layout for the pop-up window
+            Scene popupScene = new Scene(layout, 700, 400);
+            popupStage.setScene(popupScene);
+            popupStage.showAndWait();
+        });
+
+        // Adds UI elements to scene
+        anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton, addCustomerButton); // Add all the elements to the root group// Add all the elements to the root group
+
+        // Places UI elements on top of the rectangle
+        stackPane.getChildren().addAll(anchorPane, repairSearchButton, computerSearchButton, customerSearchButton, addCustomerButton);
+
+
+
         return scene;
     }
-
     private Scene createAddComputerPage(Customer customer) {  // temporary windows for each page
-
 
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
         root.setStyle("-fx-background-color: white;"); // Replace #F9F9F9 with your desired color
+
         // Text input boxes for computer details
         TextField computerIdInput = new TextField();
         TextField manufacturerInput = new TextField();
@@ -834,16 +881,15 @@ public class RepairIT extends Application {
             // Create a computer object with the input details
             Computer newComputer = new Computer(computerId, customer.getCustomerID(), manufacturer, model, serialNumber, year);
 
-            //dd the new computer to the customer
+            //add the new computer to the customer
             customer.getComputers().add(newComputer);
-
             // Show a success message
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
             alert.setHeaderText(null);
             alert.setContentText("Computer '" + newComputer.getComputerID() + "' added to '" + customer.getName() + "'.");
             alert.showAndWait();
-
+        }
             // Create a giant "Back" button
             Button giantBackButton = new Button("Back");
             giantBackButton.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -855,270 +901,236 @@ public class RepairIT extends Application {
 
             // Set the giant "Back" button at the center of the root pane
             root.setCenter(giantBackButton);
+
+        Scene scene = new Scene(root, 1000, 600);
+        return scene;
+    }
+
+    private Scene createComputerPage(Customer customer, Computer computer){
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(10));
+        Scene scene = new Scene(root, 1000, 600);
+        // Create a StackPane for the rectangle and button
+        StackPane stackPane = new StackPane();
+        // Create a AnchorPane for UI component placement
+        AnchorPane anchorPane = new AnchorPane();
+        //Pane contentPane = new Pane();
+
+        // Create a rectangle
+        Rectangle rectangle = new Rectangle();
+        rectangle.setFill(Color.WHITE);
+        rectangle.setStroke(Color.BLACK); // Set border color
+        rectangle.setStrokeWidth(2); // Set border width
+
+        // Width and height of rectangle relative size to the window
+        rectangle.widthProperty().bind(root.widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
+        rectangle.heightProperty().bind(root.heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
+        // Adds rectangle as the base layer
+        stackPane.getChildren().add(rectangle);
+
+        // Search Customer button made
+        Button customerSearchButton = new Button("Search Customer");
+        Font font = Font.font("Arial", FontWeight.BOLD, 16);
+        customerSearchButton.setFont(font);
+        customerSearchButton.setOnAction(actionEvent -> {
+            System.out.println("button clicked");
+        });
+
+        // Search Computer button made
+        Button computerSearchButton = new Button("Search Computer");
+        computerSearchButton.setFont(font);
+        computerSearchButton.setOnAction(actionEvent -> {
+            System.out.println("button clicked");
+        });
+
+        // Search RepairTicket button made
+        Button repairSearchButton = new Button("Search RepairTicket");
+        repairSearchButton.setFont(font);
+        repairSearchButton.setOnAction(actionEvent -> {
+            System.out.println("button clicked");
+        });
+
+        Button addTicketButton = new Button("Add Ticket");
+        addTicketButton.setFont(font);
+        addTicketButton.setOnAction(actionEvent -> {
+            Stage primaryStage = (Stage) addTicketButton.getScene().getWindow();
+            primaryStage.setScene(createCreateRepairTicketPage(customer, computer));
+        });
+
+        // sets the size of the add ticket button
+        addTicketButton.setPrefWidth(200);
+        addTicketButton.setPrefHeight(30);
+
+        StackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
+        // Bind the size of the button to the size of the rectangle
+        customerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
+        customerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
+        StackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
+        // Bind the size of the button to the size of the rectangle
+        computerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
+        computerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
+        StackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
+        // Bind the size of the button to the size of the rectangle
+        repairSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
+        repairSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
+
+
+        // Add the stack pane to the root BorderPane
+        root.setCenter(stackPane);
+
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER_LEFT);
+        hbox.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Add border styling
+        hbox.setPrefHeight(20); // Set the height of the HBox
+
+        // HBox.setMargin(hbox, root.getPadding());
+        //HBox.setMargin(hbox, new Insets(10, 0, 0, 100)); // Set specific coordinates for the HBox
+        // Display customer information horizontally
+        AnchorPane.setTopAnchor(hbox, 70.0);
+        AnchorPane.setLeftAnchor(hbox, 0.0);
+        AnchorPane.setRightAnchor(hbox, 0.0);
+        AnchorPane.setBottomAnchor(hbox, 400.0);
+
+          Label nameLabel = new Label("Name: " + customer.getName());
+         Label phoneLabel = new Label("Phone: " + customer.getPhone());
+         Label emailLabel = new Label("Email: " + customer.getEmail());
+
+        Font labelFont = Font.font("Arial", FontWeight.BOLD, 13); // Specify the font family, weight, and size
+          nameLabel.setFont(labelFont);
+         phoneLabel.setFont(labelFont);
+         emailLabel.setFont(labelFont);
+
+          hbox.getChildren().addAll(nameLabel, phoneLabel, emailLabel);
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        // Create an HBox for the buttons
+        HBox addComputerBox = new HBox();
+        addComputerBox.setAlignment(Pos.CENTER_RIGHT);// Create an HBox for the buttons
+        //addCustomerBox.setTranslateX(400); // Set X coordinate
+        addComputerBox.setTranslateY(100); // Set Y coordinate
+        // Add the button to the HBox
+        //addComputerBox.getChildren().add(addComputerButton);
+
+        BorderPane hboxBorder = new BorderPane();
+        hboxBorder.setCenter(addComputerBox);
+        hboxBorder.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Set border properties
+
+
+        // Add UI components and logic for the search scene here
+        Button backButton = new Button("Back");
+        backButton.setOnAction(event -> {
+            Stage primaryStage = (Stage) backButton.getScene().getWindow();
+            primaryStage.setScene(createCustomerScene(customer));
+        });
+        // sets the size of the back button
+        backButton.setPrefWidth(100);
+        backButton.setPrefHeight(30);
+
+        // Display selected computer information
+        if (computer != null) {
+            //VBox computerInfoBox = new VBox(10); // Create a VBox to hold the computer information
+            hbox.setPadding(new Insets(20));
+            Label manufacturerLabel = new Label("Manufacturer: " + computer.getManufacturer());
+            Label modelLabel = new Label("Model: " + computer.getModel());
+            Label yearLabel = new Label("Year: " + computer.getYear());
+            Label serialNumberLabel = new Label("Serial Number: " + computer.getSerialNumber());
+
+            manufacturerLabel.setFont(labelFont);
+            modelLabel.setFont(labelFont);
+            yearLabel.setFont(labelFont);
+            serialNumberLabel.setFont(labelFont);
+            // Add the computer information labels to the VBox
+            hbox.getChildren().addAll(manufacturerLabel, modelLabel, yearLabel, serialNumberLabel);
+
         }
-        Scene scene = new Scene(root, 1000, 600);
-        return scene;
-    }
 
-    private Scene createComputerPage(){   // temporary windows for each page
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(10));
-        Scene scene = new Scene(root, 1000, 600);
-        // Create a StackPane for the rectangle and button
-        StackPane stackPane = new StackPane();
-        // Create a AnchorPane for UI component placement
-        AnchorPane anchorPane = new AnchorPane();
-        //Pane contentPane = new Pane();
-
-        // Create a rectangle
-        Rectangle rectangle = new Rectangle();
-        rectangle.setFill(Color.WHITE);
-        rectangle.setStroke(Color.BLACK); // Set border color
-        rectangle.setStrokeWidth(2); // Set border width
-
-        // Width and height of rectangle relative size to the window
-        rectangle.widthProperty().bind(root.widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
-        rectangle.heightProperty().bind(root.heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
-        // Adds rectangle as the base layer
-        stackPane.getChildren().add(rectangle);
-
-        // Search Customer button made
-        Button customerSearchButton = new Button("Search Customer");
-        Font font = Font.font("Arial", FontWeight.BOLD, 16);
-        customerSearchButton.setFont(font);
-        customerSearchButton.setOnAction(actionEvent -> {
-            System.out.println("button clicked");
-        });
-
-        // Search Computer button made
-        Button computerSearchButton = new Button("Search Computer");
-        computerSearchButton.setFont(font);
-        computerSearchButton.setOnAction(actionEvent -> {
-            System.out.println("button clicked");
-        });
-
-        // Search RepairTicket button made
-        Button repairSearchButton = new Button("Search RepairTicket");
-        repairSearchButton.setFont(font);
-        repairSearchButton.setOnAction(actionEvent -> {
-            System.out.println("button clicked");
-        });
-
-        StackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
-        // Bind the size of the button to the size of the rectangle
-        customerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        customerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-        StackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
-        // Bind the size of the button to the size of the rectangle
-        computerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        computerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-        StackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
-        // Bind the size of the button to the size of the rectangle
-        repairSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        repairSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-
-
-        // Add the stack pane to the root BorderPane
-        root.setCenter(stackPane);
-
-        HBox hbox = new HBox(10);
-        hbox.setAlignment(Pos.CENTER_LEFT);
-        hbox.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Add border styling
-        hbox.setPrefHeight(20); // Set the height of the HBox
-
-        // HBox.setMargin(hbox, root.getPadding());
-        //HBox.setMargin(hbox, new Insets(10, 0, 0, 100)); // Set specific coordinates for the HBox
-        // Display customer information horizontally
-        AnchorPane.setTopAnchor(hbox, 70.0);
-        AnchorPane.setLeftAnchor(hbox, 0.0);
-        AnchorPane.setRightAnchor(hbox, 0.0);
-        AnchorPane.setBottomAnchor(hbox, 400.0);
-
-        //  Label nameLabel = new Label("Name: " + customer.getName());
-        // Label phoneLabel = new Label("Phone: " + customer.getPhone());
-        // Label emailLabel = new Label("Email: " + customer.getEmail());
-
-        Font labelFont = Font.font("Arial", FontWeight.BOLD, 14); // Specify the font family, weight, and size
-        //  nameLabel.setFont(labelFont);
-        // phoneLabel.setFont(labelFont);
-        // emailLabel.setFont(labelFont);
-
-
-        //  hbox.getChildren().addAll(nameLabel, phoneLabel, emailLabel, addComputerButton);
-
-        // Create an HBox for the buttons
-        HBox addComputerBox = new HBox();
-        addComputerBox.setAlignment(Pos.CENTER_RIGHT);// Create an HBox for the buttons
-        //addCustomerBox.setTranslateX(400); // Set X coordinate
-        addComputerBox.setTranslateY(100); // Set Y coordinate
-        // Add the button to the HBox
-        //addComputerBox.getChildren().add(addComputerButton);
-
-        BorderPane hboxBorder = new BorderPane();
-        hboxBorder.setCenter(addComputerBox);
-        hboxBorder.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Set border properties
-
-
-        // Add UI components and logic for the search scene here
-        Button backButton = new Button("Back");
-        backButton.setOnAction(event -> {
-            Stage primaryStage = (Stage) backButton.getScene().getWindow();
-            primaryStage.setScene(createMainScene());
-        });
-        // sets the size of the back button
-        backButton.setPrefWidth(100);
-        backButton.setPrefHeight(30);
         // sets location of the back button
         root.setTop(backButton);
         AnchorPane.setTopAnchor(backButton, 10.0);
         AnchorPane.setLeftAnchor(backButton, 10.0);
         AnchorPane.setTopAnchor(addComputerBox, 10.0);
 
+        // sets location of the back button
+        root.setTop(addTicketButton);
+        AnchorPane.setTopAnchor(addTicketButton, 200.0);
+        AnchorPane.setRightAnchor(addTicketButton, 10.0);
+
         stackPane.setAlignment(anchorPane, Pos.TOP_LEFT);
         stackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
         stackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
         stackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
         stackPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
+        stackPane.setAlignment(addTicketButton, Pos.CENTER_RIGHT);
         //stackPane.setAlignment(addCustomerButton, Pos.BOTTOM_CENTER);
         // stackPane.setAlignment(addComputerButton, Pos.BOTTOM_RIGHT);
         stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392));
 
         // Adds UI elements to scene
-        anchorPane.getChildren().addAll(hbox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox);
+        anchorPane.getChildren().addAll(addTicketButton,hbox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox);
         // Places UI elements on top of the rectangle
         stackPane.getChildren().addAll(anchorPane,computerSearchButton, repairSearchButton, customerSearchButton );
 
         return scene;
     }
-    private Scene createCreateRepairTicketPage(){  // temporary windows for each page
+    private Scene createCreateRepairTicketPage(Customer customer, Computer computer){  // temporary windows for each page
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
+        root.setStyle("-fx-background-color: white;"); // Replace #F9F9F9 with your desired color
+        // Text input boxes for computer details
+        TextArea repairTicketIssues = new TextArea();
+
+        // Create a dialog box to input computer details
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("set new Repair Ticket");
+        dialog.setHeaderText("Enter the issue:");
+
+        // Set the dialog content
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.addRow(0, new Label("Repair Ticket:"), repairTicketIssues);
+        dialog.getDialogPane().setContent(grid);
+        // Add buttons to the dialog
+        ButtonType addButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(addButton, ButtonType.CANCEL);
+        // Wait for the user to click a button
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == addButton) {
+            // Get the entered values
+
+            String Issues = repairTicketIssues.getText();
+
+            // Create a repair ticket object with the input details
+            RepairTicket newRepairTicket = new RepairTicket();
+            newRepairTicket.EditIssue(Issues);
+            // Add the new repair ticket to the customer
+            customer.getRepairTickets().add(newRepairTicket);
+
+            // Save the repair ticket to the database or file system
+           // RepairTicketHandler repairTicketHandler = new RepairTicketHandler();
+           // repairTicketHandler.saveRepairTicket(newRepairTicket);
+            // Show a success message
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("Repair Ticket '" + newRepairTicket.getId() + "' added to '" + customer.getName() + "'.");
+            alert.showAndWait();
+        }
+
+        // Create a giant "Back" button
+        Button giantBackButton = new Button("Back");
+        giantBackButton.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        giantBackButton.setOnAction(event -> {
+            Stage primaryStage = (Stage) giantBackButton.getScene().getWindow();
+            primaryStage.setScene(createComputerPage(customer, computer));
+        });
+        // Set the giant "Back" button at the center of the root pane
+        root.setCenter(giantBackButton);
+
         Scene scene = new Scene(root, 1000, 600);
-        // Create a StackPane for the rectangle and button
-        StackPane stackPane = new StackPane();
-        // Create a AnchorPane for UI component placement
-        AnchorPane anchorPane = new AnchorPane();
-        //Pane contentPane = new Pane();
-
-        // Create a rectangle
-        Rectangle rectangle = new Rectangle();
-        rectangle.setFill(Color.WHITE);
-        rectangle.setStroke(Color.BLACK); // Set border color
-        rectangle.setStrokeWidth(2); // Set border width
-
-        // Width and height of rectangle relative size to the window
-        rectangle.widthProperty().bind(root.widthProperty().subtract(root.getPadding().getLeft() + root.getPadding().getRight()));
-        rectangle.heightProperty().bind(root.heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
-        // Adds rectangle as the base layer
-        stackPane.getChildren().add(rectangle);
-
-        // Search Customer button made
-        Button customerSearchButton = new Button("Search Customer");
-        Font font = Font.font("Arial", FontWeight.BOLD, 16);
-        customerSearchButton.setFont(font);
-        customerSearchButton.setOnAction(actionEvent -> {
-            System.out.println("button clicked");
-        });
-
-        // Search Computer button made
-        Button computerSearchButton = new Button("Search Computer");
-        computerSearchButton.setFont(font);
-        computerSearchButton.setOnAction(actionEvent -> {
-            System.out.println("button clicked");
-        });
-
-        // Search RepairTicket button made
-        Button repairSearchButton = new Button("Search RepairTicket");
-        repairSearchButton.setFont(font);
-        repairSearchButton.setOnAction(actionEvent -> {
-            System.out.println("button clicked");
-        });
-
-        StackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
-        // Bind the size of the button to the size of the rectangle
-        customerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        customerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-        StackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
-        // Bind the size of the button to the size of the rectangle
-        computerSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        computerSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-        StackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
-        // Bind the size of the button to the size of the rectangle
-        repairSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
-        repairSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
-
-
-        // Add the stack pane to the root BorderPane
-        root.setCenter(stackPane);
-
-        HBox hbox = new HBox(10);
-        hbox.setAlignment(Pos.CENTER_LEFT);
-        hbox.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Add border styling
-        hbox.setPrefHeight(20); // Set the height of the HBox
-
-        // HBox.setMargin(hbox, root.getPadding());
-        //HBox.setMargin(hbox, new Insets(10, 0, 0, 100)); // Set specific coordinates for the HBox
-        // Display customer information horizontally
-        AnchorPane.setTopAnchor(hbox, 70.0);
-        AnchorPane.setLeftAnchor(hbox, 0.0);
-        AnchorPane.setRightAnchor(hbox, 0.0);
-        AnchorPane.setBottomAnchor(hbox, 400.0);
-
-        //  Label nameLabel = new Label("Name: " + customer.getName());
-        // Label phoneLabel = new Label("Phone: " + customer.getPhone());
-        // Label emailLabel = new Label("Email: " + customer.getEmail());
-
-        Font labelFont = Font.font("Arial", FontWeight.BOLD, 14); // Specify the font family, weight, and size
-        //  nameLabel.setFont(labelFont);
-        // phoneLabel.setFont(labelFont);
-        // emailLabel.setFont(labelFont);
-
-
-        //  hbox.getChildren().addAll(nameLabel, phoneLabel, emailLabel, addComputerButton);
-
-        // Create an HBox for the buttons
-        HBox addComputerBox = new HBox();
-        addComputerBox.setAlignment(Pos.CENTER_RIGHT);// Create an HBox for the buttons
-        //addCustomerBox.setTranslateX(400); // Set X coordinate
-        addComputerBox.setTranslateY(100); // Set Y coordinate
-        // Add the button to the HBox
-        //addComputerBox.getChildren().add(addComputerButton);
-
-        BorderPane hboxBorder = new BorderPane();
-        hboxBorder.setCenter(addComputerBox);
-        hboxBorder.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Set border properties
-
-
-        // Add UI components and logic for the search scene here
-        Button backButton = new Button("Back");
-        backButton.setOnAction(event -> {
-            Stage primaryStage = (Stage) backButton.getScene().getWindow();
-            primaryStage.setScene(createMainScene());
-        });
-        // sets the size of the back button
-        backButton.setPrefWidth(100);
-        backButton.setPrefHeight(30);
-        // sets location of the back button
-        root.setTop(backButton);
-        AnchorPane.setTopAnchor(backButton, 10.0);
-        AnchorPane.setLeftAnchor(backButton, 10.0);
-        AnchorPane.setTopAnchor(addComputerBox, 10.0);
-
-        stackPane.setAlignment(anchorPane, Pos.TOP_LEFT);
-        stackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
-        stackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
-        stackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
-        stackPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
-        //stackPane.setAlignment(addCustomerButton, Pos.BOTTOM_CENTER);
-        // stackPane.setAlignment(addComputerButton, Pos.BOTTOM_RIGHT);
-        stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392));
-
-        // Adds UI elements to scene
-        anchorPane.getChildren().addAll(hbox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox);
-        // Places UI elements on top of the rectangle
-        stackPane.getChildren().addAll(anchorPane,computerSearchButton, repairSearchButton, customerSearchButton );
-
-
         return scene;
     }
 
@@ -1130,8 +1142,6 @@ public class RepairIT extends Application {
         StackPane stackPane = new StackPane();
         // Create a AnchorPane for UI component placement
         AnchorPane anchorPane = new AnchorPane();
-        //Pane contentPane = new Pane();
-
         // Create a rectangle
         Rectangle rectangle = new Rectangle();
         rectangle.setFill(Color.WHITE);
@@ -1252,4 +1262,6 @@ public class RepairIT extends Application {
 
         return scene;
     }
+
+
 }

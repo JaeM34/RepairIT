@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Computer {
     private String computerID;
     private String customerID;
@@ -5,6 +7,7 @@ public class Computer {
     private String model;
     private String serialNumber;
     private int year;
+    private ArrayList<RepairTicket> repairTickets = new ArrayList<>();
     //create computer constructor initialized by passing arguments through it
 
 
@@ -33,6 +36,18 @@ public class Computer {
     }
     public void setYear(int year) {
         this.year = year;
+    }
+
+    public void setRepairTickets(ArrayList<RepairTicket> repairTickets) {
+        this.repairTickets = repairTickets;
+    }
+
+    public void addRepairTicket(RepairTicket repairTicket) {
+        repairTickets.add(repairTicket);
+    }
+
+    public ArrayList<RepairTicket> getRepairTickets() {
+        return repairTickets;
     }
     // todo: getRepairTickets
 }

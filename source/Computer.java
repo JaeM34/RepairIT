@@ -19,7 +19,7 @@ public class Computer {
         this.model = model;
         this.serialNumber = serialNumber;
         this.year = year;
-        this.repairTickets = repairTickets;
+        this.repairTickets = new ArrayList<>();
     }
 
     public String getComputerID() {return computerID; }

@@ -76,7 +76,7 @@ public class RepairIT extends Application {
     }
 
     // Helper method to create a repair block
-    private VBox createRepairBlock(Customer customer, Computer computer, RepairTicket repairTicket) {
+    private VBox createRepairBlock(Customer customer, Computer computer ,RepairTicket repairTicket) {
         VBox repairBlock = new VBox();
         repairBlock.setSpacing(5); // Set spacing between UI components in repair block
 
@@ -98,7 +98,7 @@ public class RepairIT extends Application {
         repairButton.setOnAction(event -> {
 
             Stage primaryStage = (Stage) repairButton.getScene().getWindow();
-            primaryStage.setScene(createRepairTicketOverviewPage());
+            primaryStage.setScene(createRepairTicketOverviewPage(repairTicket));
         });
 
         // Add UI components to repair block
@@ -204,7 +204,6 @@ public class RepairIT extends Application {
         hboxBorder.setCenter(addComputerBox);
         hboxBorder.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Set border properties
 
-
         // Add UI components and logic for the search scene here
         Button backButton = new Button("Back");
         backButton.setOnAction(event -> {
@@ -233,7 +232,6 @@ public class RepairIT extends Application {
         anchorPane.getChildren().addAll(hbox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox);
         // Places UI elements on top of the rectangle
         stackPane.getChildren().addAll(anchorPane,computerSearchButton, repairSearchButton, customerSearchButton );
-
 
         return scene;
     }
@@ -357,7 +355,6 @@ public class RepairIT extends Application {
           AnchorPane.setRightAnchor(computerInfoBox, 0.0);
           AnchorPane.setBottomAnchor(computerInfoBox, 0.0);
 
-
           // Display computer information
           ArrayList<Computer> computers = customer.getComputers();
           if (computers != null ) {
@@ -392,7 +389,6 @@ public class RepairIT extends Application {
                   computerInfoBox.getChildren().addAll(computerBox);
               }
           }
-
           // sets location of the back button
           root.setTop(backButton);
           AnchorPane.setTopAnchor(backButton, 10.0);
@@ -506,8 +502,6 @@ public class RepairIT extends Application {
                     String email = emailField.getText();
 
                     // Create the customer
-                    // ArrayList<Computer> computers = null; // Set to null for now
-                    // ArrayList<RepairTicket> repairTickets = null; // Set to null for now
                     Customer customer1 = new Customer(namefield, address1, customerID, phone, email, null, null);
                     addCustomers.saveCustomer(customer1);
                     // Close the pop-up window
@@ -756,9 +750,6 @@ public class RepairIT extends Application {
         customer2.setRepairTickets(repairTickets1);
         customer3.setRepairTickets(repairTickets2);
 
-/*
-
-*/
 
         computer.setRepairTickets(repairTickets);
         computer2.setRepairTickets(repairTickets);
@@ -769,8 +760,6 @@ public class RepairIT extends Application {
         computer7.setRepairTickets(repairTickets);
         computer8.setRepairTickets(repairTickets);
         computer1.setRepairTickets(repairTickets);
-
-
 
         // Addss computer to the database
         addComputer.saveComputer(computer);
@@ -847,13 +836,6 @@ public class RepairIT extends Application {
         }
 
 
-       ArrayList<RepairTicket> repairTickets3 = computer1.getRepairTickets();
-
-        for( RepairTicket repairTicket: repairTickets3){
-            System.out.println(repairTicket.getId());
-        }
-
-
         // Adds UI elements to scene
         anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton); // Add all the elements to the root group// Add all the elements to the root group
         // Places UI elements on top of the rectangle
@@ -904,11 +886,13 @@ public class RepairIT extends Application {
             String serialNumber = serialNumberInput.getText();
             int year = Integer.parseInt(yearInput.getText());
 
+            ComputerHandler addComputer = new ComputerHandler();
             // Create a computer object with the input details
             Computer newComputer = new Computer(computerId, customer.getCustomerID(), manufacturer, model, serialNumber, year);
 
             //add the new computer to the customer
             customer.getComputers().add(newComputer);
+            addComputer.saveComputer(newComputer);
             // Show a success message
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Success");
@@ -997,7 +981,6 @@ public class RepairIT extends Application {
         repairSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
         repairSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
 
-
         // Add the stack pane to the root BorderPane
         root.setCenter(stackPane);
 
@@ -1006,8 +989,7 @@ public class RepairIT extends Application {
         hbox.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Add border styling
         hbox.setPrefHeight(20); // Set the height of the HBox
 
-        // HBox.setMargin(hbox, root.getPadding());
-        //HBox.setMargin(hbox, new Insets(10, 0, 0, 100)); // Set specific coordinates for the HBox
+
         // Display customer information horizontally
         AnchorPane.setTopAnchor(hbox, 70.0);
         AnchorPane.setLeftAnchor(hbox, 0.0);
@@ -1081,7 +1063,6 @@ public class RepairIT extends Application {
         // Display RepairTicket information
         ArrayList<RepairTicket> repairTickets = computer.getRepairTickets();
 
-
         if (repairTickets != null && !repairTickets.isEmpty() ) {
             Label computerLabel = new Label("Repair Tickets:");
             // Add computer information labels to the VBox
@@ -1098,11 +1079,11 @@ public class RepairIT extends Application {
                 manufacturerLabel.setFont(computerFont);
                 modelLabel.setFont(computerFont);
                 // Create a Select button for each computer
-                Button selectButton = new Button("Select");
+                Button selectButton = new Button("Edit");
                 selectButton.setOnAction(event -> {
                     // Handle the select button click event here
-                    // Stage primaryStage = (Stage) selectButton.getScene().getWindow();
-                    // primaryStage.setScene((createRepairTicketOverviewPage()));
+                     Stage primaryStage = (Stage) selectButton.getScene().getWindow();
+                     primaryStage.setScene((createEditRepairTicketScene( customer, computer, repairTickets1)));
 
                 });
                 // Add computer information labels to the computerBox
@@ -1169,12 +1150,13 @@ public class RepairIT extends Application {
                 // Get the entered values
                 String issues = repairTicketIssues.getText();
 
+                RepairTicketHandler addRepairTicket = new RepairTicketHandler();
                 // Create a repair ticket object with the input details
                 RepairTicket newRepairTicket = new RepairTicket();
                 newRepairTicket.EditIssue(issues);
-
                 // Add the new repair ticket to the computer
                 computer.addRepairTicket(newRepairTicket);
+                addRepairTicket.saveRepairTicket(newRepairTicket);
 
                 // Show a success message
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -1197,7 +1179,7 @@ public class RepairIT extends Application {
         return scene;
     }
 
-    private Scene createRepairTicketOverviewPage(){     // temporary windows for each page
+    private Scene createRepairTicketOverviewPage(RepairTicket repairTicket){     // temporary windows for each page
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
         Scene scene = new Scene(root, 1000, 600);
@@ -1269,17 +1251,19 @@ public class RepairIT extends Application {
         AnchorPane.setRightAnchor(hbox, 0.0);
         AnchorPane.setBottomAnchor(hbox, 400.0);
 
-        //  Label nameLabel = new Label("Name: " + customer.getName());
-        // Label phoneLabel = new Label("Phone: " + customer.getPhone());
-        // Label emailLabel = new Label("Email: " + customer.getEmail());
+          Label IDLabel = new Label("ID: " + repairTicket.getId());
+         Label IssuesLabel = new Label("Issues: " + repairTicket.GetIssue());
+         Label computerIDLabel = new Label("Computer ID: " + repairTicket.getComputerID());
+        Label emailLabel = new Label("Computer ID: " + repairTicket.getCustomerID());
 
         Font labelFont = Font.font("Arial", FontWeight.BOLD, 14); // Specify the font family, weight, and size
-        //  nameLabel.setFont(labelFont);
-        // phoneLabel.setFont(labelFont);
-        // emailLabel.setFont(labelFont);
+          IDLabel.setFont(labelFont);
+         IssuesLabel.setFont(labelFont);
+         computerIDLabel.setFont(labelFont);
+         emailLabel.setFont(labelFont);
 
 
-        //  hbox.getChildren().addAll(nameLabel, phoneLabel, emailLabel, addComputerButton);
+          hbox.getChildren().addAll(IDLabel, IssuesLabel, computerIDLabel, emailLabel);
 
         // Create an HBox for the buttons
         HBox addComputerBox = new HBox();
@@ -1292,6 +1276,17 @@ public class RepairIT extends Application {
         BorderPane hboxBorder = new BorderPane();
         hboxBorder.setCenter(addComputerBox);
         hboxBorder.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Set border properties
+
+        // Create a VBox for computer information
+        VBox repairTicketInfoBox = new VBox(10);
+        repairTicketInfoBox.setPadding(new Insets(10));
+
+        AnchorPane.setTopAnchor(repairTicketInfoBox, 250.0);
+        AnchorPane.setLeftAnchor(repairTicketInfoBox, 0.0);
+        AnchorPane.setRightAnchor(repairTicketInfoBox, 0.0);
+        AnchorPane.setBottomAnchor(repairTicketInfoBox, 0.0);
+
+        repairTicketInfoBox.getChildren().addAll(IDLabel, IssuesLabel);
 
 
         // Add UI components and logic for the search scene here
@@ -1309,6 +1304,8 @@ public class RepairIT extends Application {
         AnchorPane.setLeftAnchor(backButton, 10.0);
         AnchorPane.setTopAnchor(addComputerBox, 10.0);
 
+
+
         stackPane.setAlignment(anchorPane, Pos.TOP_LEFT);
         stackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
         stackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
@@ -1319,9 +1316,56 @@ public class RepairIT extends Application {
         stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392));
 
         // Adds UI elements to scene
-        anchorPane.getChildren().addAll(hbox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox);
+        anchorPane.getChildren().addAll(hbox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox, repairTicketInfoBox);
         // Places UI elements on top of the rectangle
         stackPane.getChildren().addAll(anchorPane,computerSearchButton, repairSearchButton, customerSearchButton );
+
+        return scene;
+    }
+
+    private Scene createEditRepairTicketScene(Customer customer, Computer computer, RepairTicket repairTicket) {
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(10));
+        Scene scene = new Scene(root, 1000, 600);
+
+        // Add UI components and logic for the edit repair ticket scene here
+
+        // Example code for displaying computer information
+        Label computerInfoLabel = new Label("Computer Information:");
+        Label manufacturerLabel = new Label("Manufacturer: " + computer.getManufacturer());
+        Label modelLabel = new Label("Model: " + computer.getModel());
+        Label yearLabel = new Label("Year: " + computer.getYear());
+        Label serialNumberLabel = new Label("Serial Number: " + computer.getSerialNumber());
+
+        // Example code for displaying repair ticket information
+        Label idLabel = new Label("ID: " + repairTicket.getId());
+        Label issueLabel = new Label("Issue: " + repairTicket.GetIssue());
+
+        // Example code for editing the repair ticket issue
+        TextField issueTextField = new TextField(repairTicket.GetIssue());
+
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(event -> {
+            // Handle the save button click event here
+            String updatedIssue = issueTextField.getText();
+            repairTicket.EditIssue(updatedIssue);
+            // You can add further logic here to save the updated issue
+
+            // Return to the previous scene after saving
+            Stage primaryStage = (Stage) saveButton.getScene().getWindow();
+            primaryStage.setScene(createComputerPage(customer, computer));
+        });
+
+        // Create a VBox for computer information
+        VBox computerInfoBox = new VBox(10);
+        computerInfoBox.setAlignment(Pos.CENTER);
+        computerInfoBox.getChildren().addAll(computerInfoLabel, manufacturerLabel, modelLabel, yearLabel, serialNumberLabel);
+
+        // Add UI elements to the root BorderPane
+        VBox contentBox = new VBox(10);
+        contentBox.setAlignment(Pos.CENTER);
+        contentBox.getChildren().addAll(computerInfoBox, idLabel, issueLabel, issueTextField, saveButton);
+        root.setCenter(contentBox);
 
         return scene;
     }

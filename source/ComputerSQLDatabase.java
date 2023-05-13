@@ -148,7 +148,6 @@ public class ComputerSQLDatabase {
         return b;
     }
 
-
     public void saveComputer(Computer computer) {
         try {
             if(computerExist(computer)) {
@@ -178,8 +177,6 @@ public class ComputerSQLDatabase {
                 ps.executeUpdate();
                 ps.close();
             }
-
-
 
             /*
             ArrayList<RepairTicket> tickets = RepairIT.getRepairticketHandler().getRepairTicketOnComputer(computer.getComputerID());

@@ -47,7 +47,6 @@ public class RepairTicketSQLDatabase {
             System.exit(0);
         }
     }
-
     /*
      * Given a customerID, return all RepairTickets associated with the customerID
      */
@@ -117,26 +116,53 @@ public class RepairTicketSQLDatabase {
     }
 
     public void saveRepairTicket(RepairTicket repairTicket) {
-        //todo
         try {
-            PreparedStatement ps = c.prepareStatement("UPDATE RepairTicket SET" +
-                    " ID = ?," +
-                    " CustomerID = ?," +
-                    " ComputerID = ?," +
-                    " ISSUE TEXT = ?," +
-                    " STATUS = ?");
-            ps.setString(1, repairTicket.GetIssue());
-            ps.setString(2, repairTicket.GetStatus());
-            ps.setString(1, repairTicket.getId());
-            ps.setString(2, repairTicket.customerID);
-            ps.setString(3, repairTicket.getId());
-            ps.setString(4, repairTicket.GetIssue());
-            ps.setString(5, repairTicket.GetStatus());
+            PreparedStatement ps;
+            if (repairTicketExists(repairTicket.getId())) {
+                ps = c.prepareStatement("UPDATE RepairTicket SET " +
+                        " CustomerID = ?," +
+                        " ComputerID = ?," +
+                        " ISSUE = ?," +
+                        " STATUS = ?" +
+                        " WHERE ID = ?");
+                ps.setString(1, repairTicket.getCustomerID());
+                ps.setString(2, repairTicket.getComputerID());
+                ps.setString(3, repairTicket.GetIssue());
+                ps.setString(4, repairTicket.GetStatus());
+                ps.setString(5, repairTicket.getId());
+            } else {
+                ps = c.prepareStatement("INSERT INTO RepairTicket " +
+                        " (ID, CustomerID, ComputerID, ISSUE, STATUS)" +
+                        " VALUES (?, ?, ?, ?, ?)");
+                ps.setString(1, repairTicket.getId());
+                ps.setString(2, repairTicket.getCustomerID());
+                ps.setString(3, repairTicket.getComputerID());
+                ps.setString(4, repairTicket.GetIssue());
+                ps.setString(5, repairTicket.GetStatus());
+            }
+            ps.executeUpdate();
+            ps.close();
         } catch (SQLException e) {
-            System.err.println(("Erorr while saving repair ticket " + repairTicket.getId()));
+            System.err.println("Error while saving repair ticket " + repairTicket.getId());
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
         }
-
     }
+
+    private boolean repairTicketExists(String ticketID) {
+        try {
+            PreparedStatement ps = c.prepareStatement("SELECT * FROM RepairTicket WHERE ID=?");
+            ps.setString(1, ticketID);
+            ResultSet rs = ps.executeQuery();
+            boolean exists = rs.next();
+            rs.close();
+            ps.close();
+            return exists;
+        } catch (SQLException e) {
+            System.err.println("Error while verifying if repair ticket exists");
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return false;
+    }
+
+
 }

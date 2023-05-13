@@ -76,13 +76,17 @@ public class RepairIT extends Application {
     }
 
     // Helper method to create a repair block
-    private VBox createRepairBlock(Customer customer, Computer computer) {
+    private VBox createRepairBlock(Customer customer, Computer computer, RepairTicket repairTicket) {
         VBox repairBlock = new VBox();
         repairBlock.setSpacing(5); // Set spacing between UI components in repair block
 
         // Create labels to display repair ticket information
-        Label computerLabel = new Label("Name: " +  customer.getName());
-        Label computerIDLabel = new Label("Ticket: " + customer.getRepairTickets());
+       // Label computerLabel = new Label("Name: " +  customer.getName());
+        Label computerIDLabel = new Label("TicketID: " + repairTicket.getId());
+        Label repairTicketCustomerIDLabel = new Label("Customer ID: " + repairTicket.getCustomerID());
+        Label repairComputerIDLabel = new Label("Computer ID: " + repairTicket.getComputerID());
+        Label repairTicketIssuesLabel = new Label("Issues: " + repairTicket.GetIssue());
+        Label repairTicketStatusLabel = new Label("Status: " + repairTicket.GetStatus());
 
         Button removeButton = new Button("Remove");
         removeButton.setOnAction(event -> {
@@ -98,7 +102,7 @@ public class RepairIT extends Application {
         });
 
         // Add UI components to repair block
-        repairBlock.getChildren().addAll(computerLabel, computerIDLabel, repairButton, removeButton);
+        repairBlock.getChildren().addAll(computerIDLabel,repairTicketCustomerIDLabel,repairComputerIDLabel,repairTicketIssuesLabel,repairTicketStatusLabel, repairButton, removeButton);
         return repairBlock;
     }
 
@@ -292,7 +296,6 @@ public class RepairIT extends Application {
           repairSearchButton.prefWidthProperty().bind(rectangle.widthProperty().multiply(0.2));
           repairSearchButton.prefHeightProperty().bind(rectangle.heightProperty().multiply(0.1));
 
-
           // Add the stack pane to the root BorderPane
           root.setCenter(stackPane);
 
@@ -315,12 +318,10 @@ public class RepairIT extends Application {
           addComputerButton.setPrefWidth(200); // Set the width of the button
           addComputerButton.setPrefHeight(50); // Set the height of the button
 
-
           HBox hbox = new HBox(10);
           hbox.setAlignment(Pos.CENTER_LEFT);
           hbox.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Add border styling
           hbox.setPrefHeight(20); // Set the height of the HBox
-
 
           AnchorPane.setTopAnchor(hbox, 70.0);
           AnchorPane.setLeftAnchor(hbox, 0.0);
@@ -356,11 +357,11 @@ public class RepairIT extends Application {
           AnchorPane.setRightAnchor(computerInfoBox, 0.0);
           AnchorPane.setBottomAnchor(computerInfoBox, 0.0);
 
+
           // Display computer information
           ArrayList<Computer> computers = customer.getComputers();
-          if (computers != null && !computers.isEmpty()) {
+          if (computers != null ) {
               Label computerLabel = new Label("Computers:");
-
               // Add computer information labels to the VBox
               computerInfoBox.getChildren().add(computerLabel);
 
@@ -411,7 +412,6 @@ public class RepairIT extends Application {
           anchorPane.getChildren().addAll(hbox,computerInfoBox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox);
           // Places UI elements on top of the rectangle
           stackPane.getChildren().addAll(anchorPane,computerSearchButton, repairSearchButton, customerSearchButton );
-
 
           return scene;
           }
@@ -549,7 +549,7 @@ public class RepairIT extends Application {
 
             Computer computer = computerHandler.getComputerBySerialNumber(serial);
             if (computer.getSerialNumber() != null && !serial.isEmpty()) {
-                Label resultLabel = new Label("Computer found");
+                Label resultLabel = new Label("Computer Found:\nComputer: " + computer.getComputerID() + "\nSerial Number: " + computer.getSerialNumber() + "\nModel: " + computer.getModel() + "\nYear: " + computer.getYear());
                 searchQueue.getChildren().add(resultLabel);
             } else {
                 Label resultLabel = new Label("Computer not found");
@@ -567,7 +567,7 @@ public class RepairIT extends Application {
 
             RepairTicket repairTicket = repairticketHandler.getRepairTicket(ticketID);
             if (repairTicket.getId() != null && !ticketID.isEmpty()) {
-                Label resultLabel = new Label("Ticket found");
+                Label resultLabel = new Label("Ticket Found:\nTicket: " + repairTicket.getId() + "\nIssue: " + repairTicket.GetIssue() + "\nStatus: " + repairTicket.GetStatus());
                 searchQueue.getChildren().add(resultLabel);
             } else {
                 Label resultLabel = new Label("Ticket not found");
@@ -584,7 +584,6 @@ public class RepairIT extends Application {
         // grid.add(new Label("Address:"), 0, 2);
         grid.add(new Label("Address:"), 0, 2);
         grid.add(searchField2, 1, 2);
-
 
         // Search Customer button made
         Button customerSearchButton = new Button("Search Customer");
@@ -710,15 +709,70 @@ public class RepairIT extends Application {
 
         ComputerHandler addComputer = getComputerHandler();
         Computer computer = new Computer("123","1234568", "manufacturer", "Dell","Serial number" , 2023 );
-        Computer computer1 = new Computer("456","1234568", "manufacturer", "Dell","Serial number" , 2023 );
-        Computer computer2 = new Computer("789","1234568", "manufacturer", "Dell","Serial number" , 2023 );
+        Computer computer1 = new Computer("321","1234568", "manufacturer", "Dell","Serial number" , 2023 );
+        Computer computer2 = new Computer("789","1234568", "manufacturer", "Dell","Serial number" , 2023);
         Computer computer3 = new Computer("12345","1235678", "manufacturer", "HP","Serial number" , 2023 );
-        Computer computer4 = new Computer("67890","1235678", "manufacturer", "HP","Serial number" , 2023 );
+        Computer computer4 = new Computer("67890","1235678", "manufacturer", "HP","Serial number" , 2023);
         Computer computer5 = new Computer("111213","1235678", "manufacturer", "HP","Serial number" , 2023 );
-        Computer computer6 = new Computer("212223","1234567", "manufacturer", "APPLE","Serial number" , 2023 );
+        Computer computer6 = new Computer("212223","1234567", "manufacturer", "APPLE","Serial number" , 2023  );
         Computer computer7 = new Computer("232526","1234567", "manufacturer", "LENOVO","Serial number" , 2023 );
         Computer computer8 = new Computer("272829","1234567", "manufacturer", "SAMSUNG","Serial number" , 2023 );
 
+        RepairTicketHandler addRepairTicket = new RepairTicketHandler();
+        RepairTicket ticket1 = new RepairTicket("123","CustomerID","ComputerID", "Issues", "Status");
+        RepairTicket ticket2 = new RepairTicket("321","CustomerID","ComputerID", "Issue", "Status");
+        RepairTicket ticket3 = new RepairTicket("6433","CustomerID","ComputerID", "Issue", "Status");
+        RepairTicket ticket4 = new RepairTicket("4214","CustomerID","ComputerID", "Issue", "Status");
+        RepairTicket ticket5 = new RepairTicket("64344","CustomerID","ComputerID", "Issue", "Status");
+        RepairTicket ticket6 = new RepairTicket("4241513","CustomerID","ComputerID", "Issue", "Status");
+
+
+        // not working currently
+        addRepairTicket.saveRepairTicket(ticket1);
+        addRepairTicket.saveRepairTicket(ticket2);
+        addRepairTicket.saveRepairTicket(ticket3);
+        addRepairTicket.saveRepairTicket(ticket4);
+        addRepairTicket.saveRepairTicket(ticket5);
+        addRepairTicket.saveRepairTicket(ticket6);
+
+     //   addRepairTicket.getRepairTicketsOnComputer("123");
+      //  addRepairTicket.getRepairTicketsOnComputer("321");
+        //addRepairTicket.getRepairTicketsOnComputer("6433");
+      //  addRepairTicket.getRepairTicketsOnComputer("4214");
+
+
+        ArrayList<RepairTicket> repairTickets = new ArrayList<>();
+         repairTickets.add(0,ticket1);
+        repairTickets.add(1,ticket2);
+        repairTickets.add(2,ticket3);
+
+        ArrayList<RepairTicket> repairTickets1 = new ArrayList<>();
+        repairTickets1.add(0,ticket2);
+
+        ArrayList<RepairTicket> repairTickets2 = new ArrayList<>();
+        repairTickets2.add(0,ticket3);
+
+        customer1.setRepairTickets(repairTickets);
+        customer2.setRepairTickets(repairTickets1);
+        customer3.setRepairTickets(repairTickets2);
+
+/*
+
+*/
+
+        computer.setRepairTickets(repairTickets);
+        computer2.setRepairTickets(repairTickets);
+        computer3.setRepairTickets(repairTickets);
+        computer4.setRepairTickets(repairTickets);
+        computer5.setRepairTickets(repairTickets);
+        computer6.setRepairTickets(repairTickets);
+        computer7.setRepairTickets(repairTickets);
+        computer8.setRepairTickets(repairTickets);
+        computer1.setRepairTickets(repairTickets);
+
+
+
+        // Addss computer to the database
         addComputer.saveComputer(computer);
         addComputer.saveComputer(computer1);
         addComputer.saveComputer(computer2);
@@ -727,33 +781,43 @@ public class RepairIT extends Application {
         addComputer.saveComputer(computer5);
         addComputer.saveComputer(computer6);
         addComputer.saveComputer(computer7);
-        addComputer.saveComputer(computer8);
+        addComputer.saveComputer(computer8); // Addss computer to the database
 
         customer1 = getCustomerHandler().getCustomerByID(customer1.getCustomerID());
         customer2 = getCustomerHandler().getCustomerByID(customer2.getCustomerID());
         customer3 = getCustomerHandler().getCustomerByID(customer3.getCustomerID());
 
+
         // Create empty lists for computers and repair tickets
         ArrayList<Computer> computers = new ArrayList<>();
         computers.add(0, computer);
-        computers.add(1, computer4);
-        computers.add(2, computer7);
+        computers.add(1, computer1);
+        computers.add(2, computer2);
+
         // Create empty lists for computers and repair tickets
         ArrayList<Computer> computers1 = new ArrayList<>();
-        computers1.add(0, computer8);
-        computers1.add(1, computer2);
-        computers1.add(2, computer3);
+        computers1.add(0, computer2);
+        computers1.add(1, computer3);
+        computers1.add(2, computer4);
+
         // Create empty lists for computers and repair tickets
         ArrayList<Computer> computers2 = new ArrayList<>();
-        computers2.add(0, computer5);
+        computers2.add(0, computer3);
         computers2.add(1, computer4);
-        computers2.add(2, computer7);
+        computers2.add(2, computer5);
 
-        customer1.setComputers(computers);
-        customer2.setComputers(computers1);
-        customer3.setComputers(computers2);
+        customer1.setComputers(computers1);
+        customer2.setComputers(computers2);
+        customer3.setComputers(computers);
+
+        customer1.setRepairTickets(repairTickets);
+        computer2.setRepairTickets(repairTickets);
+        computer3.setRepairTickets(repairTickets);
+
+        computer.setRepairTickets(repairTickets);
 
          CustomerHandler addCustomer = getCustomerHandler();
+
          addCustomer.saveCustomer(customer1);
         addCustomer.saveCustomer(customer2);
          addCustomer.saveCustomer(customer3);
@@ -767,57 +831,33 @@ public class RepairIT extends Application {
               customerQueue.getChildren().add(customerBlock);
           }
 
-       RepairTicketHandler addRepairTicket = new RepairTicketHandler();
-
-          RepairTicket ticket1 = new RepairTicket("ID","CustomerID","ComputerID", "Issue", "Status");
-          RepairTicket ticket2 = new RepairTicket("ID","CustomerID","ComputerID", "Issue", "Status");
-          RepairTicket ticket3 = new RepairTicket("ID","CustomerID","ComputerID", "Issue", "Status");
-          RepairTicket ticket4 = new RepairTicket("ID","CustomerID","ComputerID", "Issue", "Status");
-          RepairTicket ticket5 = new RepairTicket("ID","CustomerID","ComputerID", "Issue", "Status");
-          RepairTicket ticket6 = new RepairTicket("ID","CustomerID","ComputerID", "Issue", "Status");
-
-          // not working currently
-         // addRepairTicket.saveRepairTicket(ticket1);
-         // addRepairTicket.saveRepairTicket(ticket2);
-         // addRepairTicket.saveRepairTicket(ticket3);
-
-        ArrayList<RepairTicket> repairTickets = new ArrayList<>();
-
-          repairTickets.add(0,ticket4);
-
-
-        ArrayList<RepairTicket> repairTickets1 = new ArrayList<>();
-
-        repairTickets.add(0,ticket2);
-
-        ArrayList<RepairTicket> repairTickets2 = new ArrayList<>();
-
-        repairTickets.add(0,ticket3);
-
-        customer1.setRepairTickets(repairTickets);
-        customer2.setRepairTickets(repairTickets1);
-        customer3.setRepairTickets(repairTickets2);
-
           // Create sample data for the repair queue (replace with your actual data)
-        List<Customer> repairList = new ArrayList<>();
-        repairList.add(customer1);
-        repairList.add(customer2);
-        repairList.add(customer3);
-      //  computers.add(1, computer4);
-      //  computers.add(2, computer7);
+        List<RepairTicket> repairList = new ArrayList<>();
+        repairList.add(ticket1);
+        repairList.add(ticket2);
+        repairList.add(ticket3);
+        repairList.add(ticket4);
+        repairList.add(ticket5);
+        repairList.add(ticket6);
 
         /// Add repair blocks to the repair queue
-        for (Customer customer : repairList) {
-            VBox customerBlock = createRepairBlock(customer, computer);
+        for (RepairTicket repairTicket1 : repairList) {
+            VBox customerBlock = createRepairBlock(customer1, computer, repairTicket1);
             repairQueue.getChildren().add(customerBlock);
         }
 
+
+       ArrayList<RepairTicket> repairTickets3 = computer1.getRepairTickets();
+
+        for( RepairTicket repairTicket: repairTickets3){
+            System.out.println(repairTicket.getId());
+        }
+
+
         // Adds UI elements to scene
         anchorPane.getChildren().addAll(customerScrollPane, repairScrollPane, searchScrollPane, customerText, repairText, searchText, computerSearchButton, repairSearchButton, customerSearchButton); // Add all the elements to the root group// Add all the elements to the root group
-
         // Places UI elements on top of the rectangle
         stackPane.getChildren().addAll(anchorPane, repairSearchButton, computerSearchButton, customerSearchButton);
-
 
         return scene;
     }
@@ -892,7 +932,7 @@ public class RepairIT extends Application {
         return scene;
     }
 
-    private Scene createComputerPage(Customer customer, Computer computer){
+    private Scene createComputerPage(Customer customer, Computer computer) {
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
         Scene scene = new Scene(root, 1000, 600);
@@ -913,7 +953,6 @@ public class RepairIT extends Application {
         rectangle.heightProperty().bind(root.heightProperty().subtract(root.getPadding().getTop() + root.getPadding().getBottom()));
         // Adds rectangle as the base layer
         stackPane.getChildren().add(rectangle);
-
         // Search Customer button made
         Button customerSearchButton = new Button("Search Customer");
         Font font = Font.font("Arial", FontWeight.BOLD, 16);
@@ -921,14 +960,12 @@ public class RepairIT extends Application {
         customerSearchButton.setOnAction(actionEvent -> {
             System.out.println("button clicked");
         });
-
         // Search Computer button made
         Button computerSearchButton = new Button("Search Computer");
         computerSearchButton.setFont(font);
         computerSearchButton.setOnAction(actionEvent -> {
             System.out.println("button clicked");
         });
-
         // Search RepairTicket button made
         Button repairSearchButton = new Button("Search RepairTicket");
         repairSearchButton.setFont(font);
@@ -977,16 +1014,16 @@ public class RepairIT extends Application {
         AnchorPane.setRightAnchor(hbox, 0.0);
         AnchorPane.setBottomAnchor(hbox, 400.0);
 
-          Label nameLabel = new Label("Name: " + customer.getName());
-         Label phoneLabel = new Label("Phone: " + customer.getPhone());
-         Label emailLabel = new Label("Email: " + customer.getEmail());
+        Label nameLabel = new Label("Name: " + customer.getName());
+        Label phoneLabel = new Label("Phone: " + customer.getPhone());
+        Label emailLabel = new Label("Email: " + customer.getEmail());
 
         Font labelFont = Font.font("Arial", FontWeight.BOLD, 13); // Specify the font family, weight, and size
-          nameLabel.setFont(labelFont);
-         phoneLabel.setFont(labelFont);
-         emailLabel.setFont(labelFont);
+        nameLabel.setFont(labelFont);
+        phoneLabel.setFont(labelFont);
+        emailLabel.setFont(labelFont);
 
-          hbox.getChildren().addAll(nameLabel, phoneLabel, emailLabel);
+        hbox.getChildren().addAll(nameLabel, phoneLabel, emailLabel);
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setFitToWidth(true);
@@ -1003,7 +1040,6 @@ public class RepairIT extends Application {
         BorderPane hboxBorder = new BorderPane();
         hboxBorder.setCenter(addComputerBox);
         hboxBorder.setStyle("-fx-border-color: black; -fx-border-width: 2px;"); // Set border properties
-
 
         // Add UI components and logic for the search scene here
         Button backButton = new Button("Back");
@@ -1029,83 +1065,124 @@ public class RepairIT extends Application {
             yearLabel.setFont(labelFont);
             serialNumberLabel.setFont(labelFont);
             // Add the computer information labels to the VBox
-            hbox.getChildren().addAll(manufacturerLabel, modelLabel, yearLabel, serialNumberLabel);
-
+            hbox.getChildren().addAll( manufacturerLabel, modelLabel, yearLabel, serialNumberLabel);
         }
 
-        // sets location of the back button
-        root.setTop(backButton);
-        AnchorPane.setTopAnchor(backButton, 10.0);
-        AnchorPane.setLeftAnchor(backButton, 10.0);
-        AnchorPane.setTopAnchor(addComputerBox, 10.0);
 
-        // sets location of the back button
-        root.setTop(addTicketButton);
-        AnchorPane.setTopAnchor(addTicketButton, 200.0);
-        AnchorPane.setRightAnchor(addTicketButton, 10.0);
+        // Create a VBox for computer information
+        VBox computerInfoBox = new VBox(10);
+        computerInfoBox.setPadding(new Insets(10));
 
-        stackPane.setAlignment(anchorPane, Pos.TOP_LEFT);
-        stackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
-        stackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
-        stackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
-        stackPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
-        stackPane.setAlignment(addTicketButton, Pos.CENTER_RIGHT);
-        //stackPane.setAlignment(addCustomerButton, Pos.BOTTOM_CENTER);
-        // stackPane.setAlignment(addComputerButton, Pos.BOTTOM_RIGHT);
-        stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392));
+        AnchorPane.setTopAnchor(computerInfoBox, 250.0);
+        AnchorPane.setLeftAnchor(computerInfoBox, 0.0);
+        AnchorPane.setRightAnchor(computerInfoBox, 0.0);
+        AnchorPane.setBottomAnchor(computerInfoBox, 0.0);
 
-        // Adds UI elements to scene
-        anchorPane.getChildren().addAll(addTicketButton,hbox,computerSearchButton, repairSearchButton, customerSearchButton,backButton,hboxBorder,addComputerBox);
-        // Places UI elements on top of the rectangle
-        stackPane.getChildren().addAll(anchorPane,computerSearchButton, repairSearchButton, customerSearchButton );
+        // Display RepairTicket information
+        ArrayList<RepairTicket> repairTickets = computer.getRepairTickets();
 
+
+        if (repairTickets != null && !repairTickets.isEmpty() ) {
+            Label computerLabel = new Label("Repair Tickets:");
+            // Add computer information labels to the VBox
+            computerInfoBox.getChildren().add(computerLabel);
+            // }
+            for (RepairTicket repairTickets1 : repairTickets) {
+                HBox computerBox = new HBox(5); // Create a VBox for each computer
+                // With the corrected lines
+                Label manufacturerLabel = new Label("ID: " + repairTickets1.getId());
+                Label modelLabel = new Label("Issue: " + repairTickets1.GetIssue());
+               // Label serialNumberLabel = new Label("Computer ID: " + repairTickets1.getComputerID());
+                // Set the font size for the computer labels
+                Font computerFont = Font.font("Arial", FontWeight.BOLD, 12); // Replace 12 with the desired font size
+                manufacturerLabel.setFont(computerFont);
+                modelLabel.setFont(computerFont);
+                // Create a Select button for each computer
+                Button selectButton = new Button("Select");
+                selectButton.setOnAction(event -> {
+                    // Handle the select button click event here
+                    // Stage primaryStage = (Stage) selectButton.getScene().getWindow();
+                    // primaryStage.setScene((createRepairTicketOverviewPage()));
+
+                });
+                // Add computer information labels to the computerBox
+                computerBox.getChildren().addAll(manufacturerLabel, modelLabel, selectButton);
+                // Add computer information labels to the VBox
+                computerInfoBox.getChildren().addAll(computerBox);
+            }
+
+        }
+            // sets location of the back button
+            root.setTop(backButton);
+            AnchorPane.setTopAnchor(backButton, 10.0);
+            AnchorPane.setLeftAnchor(backButton, 10.0);
+            AnchorPane.setTopAnchor(addComputerBox, 10.0);
+
+            // sets location of the back button
+            root.setTop(addTicketButton);
+            AnchorPane.setTopAnchor(addTicketButton, 200.0);
+            AnchorPane.setRightAnchor(addTicketButton, 10.0);
+
+            stackPane.setAlignment(anchorPane, Pos.TOP_LEFT);
+            stackPane.setAlignment(repairSearchButton, Pos.TOP_RIGHT);
+            stackPane.setAlignment(computerSearchButton, Pos.TOP_CENTER);
+            stackPane.setAlignment(customerSearchButton, Pos.TOP_CENTER);
+            stackPane.setAlignment(backButton, Pos.BOTTOM_LEFT);
+            stackPane.setAlignment(addTicketButton, Pos.CENTER_RIGHT);
+            //stackPane.setAlignment(addCustomerButton, Pos.BOTTOM_CENTER);
+            // stackPane.setAlignment(addComputerButton, Pos.BOTTOM_RIGHT);
+            stackPane.setMargin(customerSearchButton, new Insets(0, 0, 0, 392));
+
+            // Adds UI elements to scene
+            anchorPane.getChildren().addAll(addTicketButton, hbox, computerSearchButton, repairSearchButton, customerSearchButton, backButton, hboxBorder, addComputerBox, computerInfoBox);
+            // Places UI elements on top of the rectangle
+            stackPane.getChildren().addAll(anchorPane, computerSearchButton, repairSearchButton, customerSearchButton);
         return scene;
-    }
-    private Scene createCreateRepairTicketPage(Customer customer, Computer computer){  // temporary windows for each page
+        }
+
+        private Scene createCreateRepairTicketPage(Customer customer, Computer computer){  // temporary windows for each page
         BorderPane root = new BorderPane();
         root.setPadding(new Insets(10));
         root.setStyle("-fx-background-color: white;"); // Replace #F9F9F9 with your desired color
-        // Text input boxes for computer details
-        TextArea repairTicketIssues = new TextArea();
+            // Text input box for repair ticket issues
+            TextArea repairTicketIssues = new TextArea();
 
-        // Create a dialog box to input computer details
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("set new Repair Ticket");
-        dialog.setHeaderText("Enter the issue:");
+            // Create a dialog box to input repair ticket details
+            Dialog<ButtonType> dialog = new Dialog<>();
+            dialog.setTitle("Create Repair Ticket");
+            dialog.setHeaderText("Enter the issue:");
 
-        // Set the dialog content
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.addRow(0, new Label("Repair Ticket:"), repairTicketIssues);
-        dialog.getDialogPane().setContent(grid);
-        // Add buttons to the dialog
-        ButtonType addButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(addButton, ButtonType.CANCEL);
-        // Wait for the user to click a button
-        Optional<ButtonType> result = dialog.showAndWait();
-        if (result.isPresent() && result.get() == addButton) {
-            // Get the entered values
+            // Set the dialog content
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.addRow(0, new Label("Repair Ticket Issues:"), repairTicketIssues);
+            dialog.getDialogPane().setContent(grid);
 
-            String Issues = repairTicketIssues.getText();
+            // Add buttons to the dialog
+            ButtonType addButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(addButton, ButtonType.CANCEL);
 
-            // Create a repair ticket object with the input details
-            RepairTicket newRepairTicket = new RepairTicket();
-            newRepairTicket.EditIssue(Issues);
-            // Add the new repair ticket to the customer
-            customer.getRepairTickets().add(newRepairTicket);
+            // Wait for the user to click a button
+            Optional<ButtonType> result = dialog.showAndWait();
+            if (result.isPresent() && result.get() == addButton) {
+                // Get the entered values
+                String issues = repairTicketIssues.getText();
 
-            // Save the repair ticket to the database or file system
-           // RepairTicketHandler repairTicketHandler = new RepairTicketHandler();
-           // repairTicketHandler.saveRepairTicket(newRepairTicket);
-            // Show a success message
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Repair Ticket '" + newRepairTicket.getId() + "' added to '" + customer.getName() + "'.");
-            alert.showAndWait();
-        }
+                // Create a repair ticket object with the input details
+                RepairTicket newRepairTicket = new RepairTicket();
+                newRepairTicket.EditIssue(issues);
 
+                // Add the new repair ticket to the computer
+                computer.addRepairTicket(newRepairTicket);
+
+                // Show a success message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Success");
+                alert.setHeaderText(null);
+                alert.setContentText("Repair Ticket added to the computer.");
+                alert.showAndWait();
+            }
         // Create a giant "Back" button
         Button giantBackButton = new Button("Back");
         giantBackButton.setFont(Font.font("Arial", FontWeight.BOLD, 24));
